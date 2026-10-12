@@ -1,0 +1,13 @@
+name: Wilma Briefing
+version: "0.1.0"
+slug: wilma_briefing
+description: Wilma-koulukatsaus ilmoituksena
+arch: [amd64, aarch64]
+startup: once
+boot: manual
+homeassistant_api: true
+options:
+  notify_service: mobile_app_puhelin
+schema:
+  notify_service: str
+  
