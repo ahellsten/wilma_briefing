@@ -1,0 +1,30 @@
+{
+  "when": "week",
+  "weekStart": "2026-10-12",
+  "weekEnd": "2026-10-16",
+  "students": [
+    {
+      "student": { "studentNumber": "1001", "name": "Aino Esimerkki" },
+      "lessons": [
+        { "date": "2026-10-12", "dayOfWeek": 1, "start": "08:15", "end": "09:00", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" },
+        { "date": "2026-10-12", "dayOfWeek": 1, "start": "09:15", "end": "10:00", "subject": "Englanti", "subjectCode": "ENA_7", "teacher": "Laine Liisa", "teacherCode": "LAL", "groupId": 11, "room": "B12" },
+        { "date": "2026-10-13", "dayOfWeek": 2, "start": "08:15", "end": "09:00", "subject": "Biologia", "subjectCode": "BI_7", "teacher": "Mäki Maija", "teacherCode": "MAM", "groupId": 13, "room": "C1" },
+        { "date": "2026-10-13", "dayOfWeek": 2, "start": "10:00", "end": "10:45", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" },
+        { "date": "2026-10-14", "dayOfWeek": 3, "start": "08:15", "end": "09:00", "subject": "Englanti", "subjectCode": "ENA_7", "teacher": "Laine Liisa", "teacherCode": "LAL", "groupId": 11, "room": "B12" },
+        { "date": "2026-10-14", "dayOfWeek": 3, "start": "09:15", "end": "10:00", "subject": "Historia", "subjectCode": "HI_7", "teacher": "Koski Kari", "teacherCode": "KOK", "groupId": 12, "room": null },
+        { "date": "2026-10-15", "dayOfWeek": 4, "start": "08:15", "end": "09:00", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" },
+        { "date": "2026-10-15", "dayOfWeek": 4, "start": "09:00", "end": "09:45", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" },
+        { "date": "2026-10-15", "dayOfWeek": 4, "start": "10:15", "end": "11:00", "subject": "Englanti", "subjectCode": "ENA_7", "teacher": "Laine Liisa", "teacherCode": "LAL", "groupId": 11, "room": "B12" },
+        { "date": "2026-10-15", "dayOfWeek": 4, "start": "12:00", "end": "14:00", "subject": "Biologia", "subjectCode": "BI_7", "teacher": "Mäki Maija", "teacherCode": "MAM", "groupId": 13, "room": "C1" },
+        { "date": "2026-10-16", "dayOfWeek": 5, "start": "08:15", "end": "09:00", "subject": "Historia", "subjectCode": "HI_7", "teacher": "Koski Kari", "teacherCode": "KOK", "groupId": 12, "room": null }
+      ]
+    },
+    {
+      "student": { "studentNumber": "1002", "name": "Eero Esimerkki" },
+      "lessons": [
+        { "date": "2026-10-14", "dayOfWeek": 3, "start": "09:00", "end": "13:00", "subject": "Luokanopettajan tunnit", "subjectCode": "LO", "teacher": "Salo Sanna", "teacherCode": "SAS", "groupId": 20, "room": "101" },
+        { "date": "2026-10-16", "dayOfWeek": 5, "start": "09:00", "end": "12:00", "subject": "Luokanopettajan tunnit", "subjectCode": "LO", "teacher": "Salo Sanna", "teacherCode": "SAS", "groupId": 20, "room": "101" }
+      ]
+    }
+  ]
+}

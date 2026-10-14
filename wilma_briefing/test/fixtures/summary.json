@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-10-14T10:00:00+03:00",
+  "students": [
+    {
+      "student": { "studentNumber": "1001", "name": "Aino Esimerkki" },
+      "summary": {
+        "today": "2026-10-14",
+        "tomorrow": "2026-10-15",
+        "todaySchedule": [
+          { "date": "2026-10-14", "dayOfWeek": 3, "start": "08:15", "end": "09:00", "subject": "Englanti", "subjectCode": "ENA_7", "teacher": "Laine Liisa", "teacherCode": "LAL", "groupId": 11, "room": "B12" },
+          { "date": "2026-10-14", "dayOfWeek": 3, "start": "09:15", "end": "10:00", "subject": "Historia", "subjectCode": "HI_7", "teacher": "Koski Kari", "teacherCode": "KOK", "groupId": 12, "room": null }
+        ],
+        "tomorrowSchedule": [
+          { "date": "2026-10-15", "dayOfWeek": 4, "start": "08:15", "end": "09:00", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" },
+          { "date": "2026-10-15", "dayOfWeek": 4, "start": "09:00", "end": "09:45", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" },
+          { "date": "2026-10-15", "dayOfWeek": 4, "start": "10:15", "end": "11:00", "subject": "Englanti", "subjectCode": "ENA_7", "teacher": "Laine Liisa", "teacherCode": "LAL", "groupId": 11, "room": "B12" },
+          { "date": "2026-10-15", "dayOfWeek": 4, "start": "12:00", "end": "14:00", "subject": "Biologia", "subjectCode": "BI_7", "teacher": "Mäki Maija", "teacherCode": "MAM", "groupId": 13, "room": "C1" }
+        ],
+        "upcomingExams": [
+          { "examId": 501, "date": "2026-10-21", "time": null, "name": "Yhtälöt", "subject": "Fysiikka", "subjectCode": "FY_7", "topic": "Luvut 1–3", "teacher": "Virtanen Ville", "teacherCode": "VIV" },
+          { "examId": 500, "date": "2026-10-15", "time": "12:00", "name": "Kasvit", "subject": "Biologia", "subjectCode": "BI_7", "topic": "Kappaleet 1–4", "teacher": "Mäki Maija", "teacherCode": "MAM" }
+        ],
+        "homework": [
+          { "date": "2026-10-14", "subject": "Englanti", "subjectCode": "ENA7", "homework": "Unit 3 sanat", "teacher": "Laine Liisa", "teacherCode": "LAL" },
+          { "date": "2026-10-13", "subject": "Fysiikka", "subjectCode": "FY_7", "homework": "s. 45 teht. 1–5", "teacher": "Virtanen Ville", "teacherCode": "VIV" }
+        ],
+        "lessonNotes": [],
+        "news": [],
+        "messages": [
+          { "wilmaId": 9001, "subject": "Retkipäivä perjantaina", "sentAt": "2026-10-13T15:02:00+03:00", "senderName": "Virtanen Ville", "folder": "inbox", "unread": true, "replyCount": 0 },
+          { "wilmaId": 9000, "subject": "Kuvauspäivä", "sentAt": "2026-10-10T09:00:00+03:00", "senderName": "Rehtori", "folder": "inbox", "unread": false, "replyCount": 2 }
+        ],
+        "unreadMessages": 1
+      }
+    },
+    {
+      "student": { "studentNumber": "1002", "name": "Eero Esimerkki" },
+      "summary": {
+        "today": "2026-10-14",
+        "tomorrow": "2026-10-15",
+        "todaySchedule": [
+          { "date": "2026-10-14", "dayOfWeek": 3, "start": "09:00", "end": "13:00", "subject": "Luokanopettajan tunnit", "subjectCode": "LO", "teacher": "Salo Sanna", "teacherCode": "SAS", "groupId": 20, "room": "101" }
+        ],
+        "tomorrowSchedule": [],
+        "upcomingExams": [],
+        "homework": [],
+        "lessonNotes": [],
+        "news": [],
+        "messages": [],
+        "unreadMessages": 0,
+        "unavailable": ["lessonNotes", "appointments"]
+      }
+    }
+  ]
+}

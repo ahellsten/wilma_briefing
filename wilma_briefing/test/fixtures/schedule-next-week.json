@@ -1,0 +1,19 @@
+{
+  "when": "next-week",
+  "weekStart": "2026-10-19",
+  "weekEnd": "2026-10-23",
+  "students": [
+    {
+      "student": { "studentNumber": "1001", "name": "Aino Esimerkki" },
+      "lessons": [
+        { "date": "2026-10-19", "dayOfWeek": 1, "start": "08:15", "end": "09:00", "subject": "Fysiikka", "subjectCode": "FY_7", "teacher": "Virtanen Ville", "teacherCode": "VIV", "groupId": 10, "room": "A203" }
+      ]
+    },
+    {
+      "student": { "studentNumber": "1002", "name": "Eero Esimerkki" },
+      "lessons": [
+        { "date": "2026-10-19", "dayOfWeek": 1, "start": "09:00", "end": "12:00", "subject": "Luokanopettajan tunnit", "subjectCode": "LO", "teacher": "Salo Sanna", "teacherCode": "SAS", "groupId": 20, "room": "101" }
+      ]
+    }
+  ]
+}

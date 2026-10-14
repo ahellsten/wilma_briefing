@@ -1,0 +1,41 @@
+configuration:
+  wilma_tenant:
+    name: Wilma-osoite
+    description: Koulun Wilma-osoite, esim. https://espoo.inschool.fi (myös kaupungin tai koulun nimi käy).
+  wilma_username:
+    name: Käyttäjätunnus
+    description: Huoltajan Wilma-tunnus.
+  wilma_password:
+    name: Salasana
+  wilma_totp_secret:
+    name: Kaksivaiheisen tunnistautumisen avain
+    description: Vain jos tili käyttää kaksivaiheista tunnistautumista. Todennussovelluksen asetusavain (base32 tai otpauth://-osoite).
+  language:
+    name: Kieli
+    description: Kortin ja ilmoitusten kieli.
+  name_display:
+    name: Lapsen nimi
+    description: Näytä vain etunimi (oletus) tai koko nimi Wilman mukaan. Vaikuttaa myös laitteen ja entiteettien nimiin.
+  cutoff_time:
+    name: Seuraavaan päivään klo
+    description: Tämän kellonajan (HH:MM) jälkeen kortti näyttää seuraavan koulupäivän ja päivän ilmoitus lähetetään.
+  days_ahead:
+    name: Näytettävät koulupäivät
+    description: Montako tulevaa koulupäivää näytetään vaihtoajan jälkeen.
+  homework_lookback_days:
+    name: Läksyjen haku taaksepäin (päivää)
+    description: Kuinka kaukaa aiemmilta tunneilta läksyjä etsitään.
+  refresh_interval_minutes:
+    name: Päivitysväli (min)
+    description: Kuinka usein Wilmasta haetaan aktiivisina tunteina. Jokainen uusi Wilma-kirjautuminen kirjaa sinut ulos selaimen Wilmasta, joten pidä väli melko pitkänä.
+  active_hours_start:
+    name: Aktiiviaika alkaa
+    description: Aktiiviajan ulkopuolella ei haeta (paitsi kerran ennen vaihtoaikaa).
+  active_hours_end:
+    name: Aktiiviaika päättyy
+  notify_enabled:
+    name: Päivittäinen ilmoitus
+    description: Lähetä yhteenveto koulupäivää edeltävänä iltana.
+  notify_services:
+    name: Ilmoituspalvelut
+    description: Notify-palvelut ilman "notify."-etuliitettä, esim. mobile_app_puhelin.

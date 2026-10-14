@@ -1,0 +1,41 @@
+configuration:
+  wilma_tenant:
+    name: Wilma address
+    description: Your school's Wilma address, e.g. https://espoo.inschool.fi (a city or school name also works).
+  wilma_username:
+    name: Username
+    description: The guardian's Wilma username.
+  wilma_password:
+    name: Password
+  wilma_totp_secret:
+    name: Two-step verification key
+    description: Only if the account uses two-step verification. The authenticator setup key (base32 or otpauth:// URI).
+  language:
+    name: Language
+    description: Language of the card and notifications.
+  name_display:
+    name: Child's name
+    description: Show only the first name (default) or the full name as Wilma gives it. Also sets the device and entity names.
+  cutoff_time:
+    name: Switch to next day at
+    description: After this time (HH:MM) the card shows the next school day and the daily notification is sent.
+  days_ahead:
+    name: School days to show
+    description: How many upcoming school days to show after the switch time.
+  homework_lookback_days:
+    name: Homework look-back (days)
+    description: How far back to look for homework given in earlier lessons.
+  refresh_interval_minutes:
+    name: Refresh interval (minutes)
+    description: How often to fetch from Wilma during active hours. Each new Wilma login logs you out of Wilma in your browser, so keep this fairly long.
+  active_hours_start:
+    name: Active hours start
+    description: No fetching between active hours end and start (except one fetch before the switch time).
+  active_hours_end:
+    name: Active hours end
+  notify_enabled:
+    name: Daily notification
+    description: Send a summary on the evening before each school day.
+  notify_services:
+    name: Notify services
+    description: Notify services without the "notify." prefix, e.g. mobile_app_my_phone.
