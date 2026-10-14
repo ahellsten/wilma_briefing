@@ -25,6 +25,10 @@ npm run lint      # tsc --noEmit
 
 To run locally, build the image and run it with `MQTT_URL=mqtt://…`, `DRY_RUN=1` (notifications are printed, not sent), and optionally `WILMA_BIN=<script>` to replace the CLI with a fake that serves fixtures. Options are read from `/data/options.json`.
 
+## Home Assistant naming
+
+Home Assistant renamed add-ons to **apps** in 2026. The local folder is `/local_apps` (it used to be `/addons`), the map types are `local_apps` and `app_config`, and `build.yaml` is no longer used, so the Dockerfile sets its own `FROM`. The developer docs are at developers.home-assistant.io/docs/apps/.
+
 ## Don't break
 
 - MQTT `unique_id`s are `wilma_briefing_<studentNumber>_<key>`. Changing them duplicates entities on existing installs.

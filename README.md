@@ -7,7 +7,7 @@ User documentation is in [wilma_briefing/DOCS.md](wilma_briefing/DOCS.md). Home 
 ## Install
 
 1. Install the **Mosquitto broker** add-on and set up the **MQTT** integration.
-2. Add this repository: **Settings → Add-ons → Add-on store → ⋮ → Repositories →** `https://github.com/ahellsten/wilma_briefing`. Alternatively, copy `wilma_briefing/` to `/addons/` and use it as a local add-on.
+2. Add this repository in the app store (called the add-on store before Home Assistant 2026): **⋮ → Repositories →** `https://github.com/ahellsten/wilma_briefing`. Alternatively, copy `wilma_briefing/` into the local apps folder and install it from the store's *Local* section. Newer versions show that folder as `/local_apps` over Samba/SSH; older ones as `/addons`.
 3. Install **Wilma Briefing**, fill in the Wilma address, username, password and notify service, and start it.
 4. Add the Markdown card from [DOCS.md](wilma_briefing/DOCS.md#dashboard-card).
 
