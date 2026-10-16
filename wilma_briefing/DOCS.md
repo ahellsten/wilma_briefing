@@ -77,6 +77,13 @@ cards:
 
 ## Instant alert for new messages (optional)
 
+This is an ordinary automation that you create yourself:
+
+1. Go to **Settings → Automations & scenes → Create automation → Create new automation**.
+2. Open **⋮ → Edit in YAML** and paste the example below.
+3. Replace the entity IDs with your children's unread message sensors. You can find them under **Settings → Devices & services → MQTT**, on each child's Wilma device. Replace `notify.mobile_app_my_phone` with your own notify service.
+4. Save. The automation works right away.
+
 ```yaml
 alias: Wilma – new message
 triggers:
@@ -93,9 +100,15 @@ actions:
       message: "{{ (state_attr(trigger.entity_id, 'messages') or [{}])[0].subject | default('New message') }}"
 ```
 
-## Recorder
+## Recorder (optional)
 
-The briefing attributes can be large. To keep them out of the history database:
+The briefing attributes can be large. Excluding them keeps the history database smaller, and it also keeps the children's school data out of history.
+
+This setting goes in Home Assistant's `configuration.yaml` and can't be made in the UI:
+
+1. Open `/homeassistant/configuration.yaml`, for example with the **File editor** or **Studio Code Server** add-on, or over the Samba share.
+2. Add the block below. If the file already has a `recorder:` section, add the `exclude` part to it instead of adding a second `recorder:`.
+3. Restart Home Assistant (**Settings → System → ⋮ → Restart Home Assistant**). Reloading YAML is not enough for the recorder.
 
 ```yaml
 recorder:
