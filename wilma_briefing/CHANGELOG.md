@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Fix every lesson showing twice on the card for today and tomorrow.
+
 ## 0.2.0
 
 - Rewritten as a long-running add-on that publishes Home Assistant entities over MQTT discovery.
