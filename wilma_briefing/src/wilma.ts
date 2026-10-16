@@ -1,4 +1,5 @@
 import { execFile } from "node:child_process";
+import { sameSubject } from "./briefing.js";
 
 /*
  * Thin wrapper around the `wilma` CLI (@wilm-ai/wilma-cli 2.x). The CLI's JSON
@@ -18,6 +19,7 @@ export interface Lesson {
   subject: string;
   subjectCode: string;
   teacher: string;
+  teacherCode?: string;
   room?: string | null;
 }
 
@@ -177,10 +179,13 @@ export async function fetchAll(run: Runner, opts: { includeNextWeek: boolean }):
 
   const students = summary.students.map(({ student, summary: s }): StudentData => {
     const sn = student.studentNumber;
-    const lessons = dedupe(
-      [...s.todaySchedule, ...s.tomorrowSchedule, ...(pick(week, sn)?.lessons ?? []), ...(pick(nextWeek, sn)?.lessons ?? [])],
-      (l) => `${l.date}|${l.start}|${l.subjectCode}|${l.subject}`
-    ).sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+    // The schedule goes first: it has rooms, the summary's lessons don't.
+    const lessons = mergeLessons([
+      ...(pick(week, sn)?.lessons ?? []),
+      ...(pick(nextWeek, sn)?.lessons ?? []),
+      ...s.todaySchedule,
+      ...s.tomorrowSchedule,
+    ]).sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
     const hw = dedupe(
       [...s.homework, ...(pick(homework, sn)?.homework ?? [])],
       (h) => `${h.date}|${h.subjectCode}|${h.homework}`
@@ -219,6 +224,26 @@ export function applyNameDisplay(result: FetchResult, mode: NameDisplay): FetchR
       return counts.get(short) === 1 ? { ...s, student: { ...s.student, name: short } } : s;
     }),
   };
+}
+
+/**
+ * Drops lessons already listed. The summary and the schedule describe the same
+ * lesson with different subject names and codes, so a lesson is a repeat when
+ * it is in the same slot with the same subject or teacher.
+ */
+function mergeLessons(lessons: Lesson[]): Lesson[] {
+  const out: Lesson[] = [];
+  for (const l of lessons) {
+    const repeat = out.some(
+      (o) =>
+        o.date === l.date &&
+        o.start === l.start &&
+        o.end === l.end &&
+        (sameSubject(o, l) || (Boolean(o.teacherCode) && o.teacherCode === l.teacherCode))
+    );
+    if (!repeat) out.push(l);
+  }
+  return out;
 }
 
 function dedupe<T>(items: T[], key: (t: T) => string): T[] {
