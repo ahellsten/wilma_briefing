@@ -14,6 +14,7 @@ export interface Options {
   cutoffMinutes: number;
   daysAhead: number;
   lookbackDays: number;
+  newGradeDays: number;
   refreshMinutes: number;
   activeStart: number;
   activeEnd: number;
@@ -45,6 +46,7 @@ export function loadOptions(path = process.env.OPTIONS_PATH ?? "/data/options.js
     cutoffMinutes: parseHHMM(raw.cutoff_time ?? "16:00"),
     daysAhead: clampInt(raw.days_ahead, 1, 5, 1),
     lookbackDays: clampInt(raw.homework_lookback_days, 1, 21, 7),
+    newGradeDays: clampInt(raw.new_grade_days, 1, 30, 7),
     refreshMinutes: clampInt(raw.refresh_interval_minutes, 15, 240, 60),
     activeStart: parseHHMM(raw.active_hours_start ?? "06:30"),
     activeEnd: parseHHMM(raw.active_hours_end ?? "21:30"),

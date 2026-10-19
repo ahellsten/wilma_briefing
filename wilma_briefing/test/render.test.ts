@@ -3,7 +3,7 @@ import { buildBriefing } from "../src/briefing.js";
 import { briefingState, dayLabel, formatDate, renderMarkdown, renderNotification } from "../src/render.js";
 import { loadData } from "./helpers.js";
 
-const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7 };
+const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7, newGradeDays: 7 };
 const WED = "2026-10-14";
 
 describe("dates", () => {

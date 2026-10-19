@@ -21,7 +21,7 @@ async function main() {
   mkdirSync(dirname(configPath), { recursive: true });
 
   const run = cliRunner(wilmaEnv(opts));
-  const cfg = { cutoffMinutes: opts.cutoffMinutes, daysAhead: opts.daysAhead, lookbackDays: opts.lookbackDays };
+  const cfg = { cutoffMinutes: opts.cutoffMinutes, daysAhead: opts.daysAhead, lookbackDays: opts.lookbackDays, newGradeDays: opts.newGradeDays };
   let gradesSeen: GradesSeen = {};
   try {
     gradesSeen = JSON.parse(readFileSync(GRADES_PATH, "utf8")) as GradesSeen;

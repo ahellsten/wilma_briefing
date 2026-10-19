@@ -4,7 +4,7 @@ import { markNotified, trackGrades, withSeen } from "../src/grades.js";
 import { gradeText, renderHtml, renderMarkdown, renderNotification } from "../src/render.js";
 import { loadData } from "./helpers.js";
 
-const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7 };
+const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7, newGradeDays: 7 };
 const WED = "2026-10-14";
 
 describe("trackGrades", () => {
@@ -57,6 +57,8 @@ describe("new grades", () => {
     // Seen on 13 Oct: still new on the 19th, gone on the 20th.
     expect(buildBriefing(withSeen(data.students, seen)[0], "2026-10-19", 8 * 60, cfg).newGrades).toHaveLength(2);
     expect(buildBriefing(withSeen(data.students, seen)[0], "2026-10-20", 8 * 60, cfg).newGrades).toHaveLength(0);
+    // A longer period keeps them.
+    expect(buildBriefing(withSeen(data.students, seen)[0], "2026-10-20", 8 * 60, { ...cfg, newGradeDays: 14 }).newGrades).toHaveLength(2);
   });
 
   it("puts each new grade in the notification once", async () => {

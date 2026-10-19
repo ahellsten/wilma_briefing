@@ -20,6 +20,7 @@ Shows your children's next school day from [Wilma](https://www.visma.fi/wilma/) 
 | `cutoff_time` | `16:00` | Before this time the card shows today; after it, the next school day |
 | `days_ahead` | `1` | School days to show after the cutoff (1–5) |
 | `homework_lookback_days` | `7` | How far back to look for homework |
+| `new_grade_days` | `7` | How many days a new grade stays on the card (1–30) |
 | `refresh_interval_minutes` | `60` | Fetch interval during active hours |
 | `active_hours_start` / `_end` | `06:30` / `21:30` | No fetching outside these hours |
 | `notify_enabled` | `true` | Daily notification |
@@ -49,7 +50,7 @@ Wilma records homework on the lesson where it was given and has no due date. The
 
 ## New grades
 
-A grade's date in Wilma is the day of the exam, and teachers often enter the grade days later. So the add-on remembers when it first saw each grade (in `/data/grades_seen.json`) and shows it as new for 7 days from then, in a blue box on the card. On the first start, the grades already in Wilma are not shown as new. Each new grade is also included once in the daily notification.
+A grade's date in Wilma is the day of the exam, and teachers often enter the grade days later. So the add-on remembers when it first saw each grade (in `/data/grades_seen.json`) and shows it as new for `new_grade_days` days (7 by default) from then, in a blue box on the card. On the first start, the grades already in Wilma are not shown as new. Each new grade is also included once in the daily notification.
 
 ## When data is fetched
 

@@ -3,7 +3,7 @@ import { buildBriefing, sameSubject, selectTargetDays } from "../src/briefing.js
 import { applyNameDisplay, fetchAll, WilmaError } from "../src/wilma.js";
 import { fixtureRunner, loadData } from "./helpers.js";
 
-const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7 };
+const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7, newGradeDays: 7 };
 const WED = "2026-10-14";
 
 describe("selectTargetDays", () => {

@@ -28,6 +28,9 @@ configuration:
   homework_lookback_days:
     name: Läksyjen haku taaksepäin (päivää)
     description: Kuinka kaukaa aiemmilta tunneilta läksyjä etsitään.
+  new_grade_days:
+    name: Uudet arvosanat näkyvissä (päivää)
+    description: Montako päivää uusi koearvosana näkyy kortilla sen ilmestyttyä Wilmaan.
   refresh_interval_minutes:
     name: Päivitysväli (min)
     description: Kuinka usein Wilmasta haetaan aktiivisina tunteina. Jokainen uusi Wilma-kirjautuminen kirjaa sinut ulos selaimen Wilmasta, joten pidä väli melko pitkänä.

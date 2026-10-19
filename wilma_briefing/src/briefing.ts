@@ -5,6 +5,8 @@ export interface BriefingConfig {
   cutoffMinutes: number;
   daysAhead: number;
   lookbackDays: number;
+  /** A grade counts as new for this many days after the add-on first saw it. */
+  newGradeDays: number;
 }
 
 export interface BriefingLesson extends Lesson {
@@ -24,9 +26,6 @@ export interface BriefingDay {
   exams: Exam[];
 }
 
-/** A grade counts as new for this many days after the add-on first saw it. */
-export const NEW_GRADE_DAYS = 7;
-
 export interface Briefing {
   student: StudentRef;
   today: string;
@@ -37,7 +36,7 @@ export interface Briefing {
   homework: OpenHomework[];
   upcomingExams: Exam[];
   nextExam: Exam | null;
-  /** Grades first seen within NEW_GRADE_DAYS, newest first. */
+  /** Grades first seen within `newGradeDays`, newest first. */
   newGrades: Grade[];
   unreadMessages: MessageSummary[];
   unreadCount: number;
@@ -111,8 +110,8 @@ export function openHomework(lessons: Lesson[], homework: Homework[], from: stri
     .sort((a, b) => (a.due ?? "9999").localeCompare(b.due ?? "9999") || a.subject.localeCompare(b.subject));
 }
 
-export function newGrades(grades: Grade[], today: string): Grade[] {
-  const since = addDays(today, -(NEW_GRADE_DAYS - 1));
+export function newGrades(grades: Grade[], today: string, days: number): Grade[] {
+  const since = addDays(today, -(days - 1));
   // Grades not tracked yet (no `seen`) are never new.
   return grades
     .filter((g) => g.seen !== undefined && g.seen >= since)
@@ -157,7 +156,7 @@ export function buildBriefing(data: StudentData, today: string, nowMinutes: numb
     homework,
     upcomingExams,
     nextExam: upcomingExams[0] ?? null,
-    newGrades: newGrades(data.grades ?? [], today),
+    newGrades: newGrades(data.grades ?? [], today, cfg.newGradeDays),
     unreadMessages: data.unreadMessages,
     unreadCount: data.unreadCount,
     warnings: data.warnings,

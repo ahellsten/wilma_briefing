@@ -28,6 +28,9 @@ configuration:
   homework_lookback_days:
     name: Homework look-back (days)
     description: How far back to look for homework given in earlier lessons.
+  new_grade_days:
+    name: New grades shown for (days)
+    description: How many days a new exam grade stays on the card after it appears in Wilma.
   refresh_interval_minutes:
     name: Refresh interval (minutes)
     description: How often to fetch from Wilma during active hours. Each new Wilma login logs you out of Wilma in your browser, so keep this fairly long.

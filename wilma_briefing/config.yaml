@@ -1,5 +1,5 @@
 name: Wilma Briefing
-version: "0.2.1"
+version: "0.3.0"
 slug: wilma_briefing
 description: Wilma school schedule, homework and unread messages as Home Assistant entities
 arch: [amd64, aarch64]
@@ -19,6 +19,7 @@ options:
   cutoff_time: "16:00"
   days_ahead: 1
   homework_lookback_days: 7
+  new_grade_days: 7
   refresh_interval_minutes: 60
   active_hours_start: "06:30"
   active_hours_end: "21:30"
@@ -35,6 +36,7 @@ schema:
   cutoff_time: "match(^([01]?[0-9]|2[0-3]):[0-5][0-9]$)"
   days_ahead: int(1,5)
   homework_lookback_days: int(1,21)
+  new_grade_days: int(1,30)
   refresh_interval_minutes: int(15,240)
   active_hours_start: "match(^([01]?[0-9]|2[0-3]):[0-5][0-9]$)"
   active_hours_end: "match(^([01]?[0-9]|2[0-3]):[0-5][0-9]$)"

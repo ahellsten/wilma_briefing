@@ -52,7 +52,7 @@ const runner: Runner = async (args) => {
   throw new Error(cmd);
 };
 
-const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7 };
+const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7, newGradeDays: 7 };
 const highlighted = (today: string, minutes: number, data: Awaited<ReturnType<typeof fetchAll>>) =>
   buildBriefing(data.students[0], today, minutes, cfg).days[0].lessons.map((l) => [l.subject, l.homework.map((h) => h.homework)]);
 
