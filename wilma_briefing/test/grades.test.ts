@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildBriefing } from "../src/briefing.js";
 import { markNotified, trackGrades, withSeen } from "../src/grades.js";
-import { gradeText, HTML_ITEM_GAP, renderHtml, renderMarkdown, renderNotification } from "../src/render.js";
+import { gradeText, renderHtml, renderMarkdown, renderNotification } from "../src/render.js";
 import { loadData } from "./helpers.js";
 
 const cfg = { cutoffMinutes: 16 * 60, daysAhead: 1, lookbackDays: 7, newGradeDays: 7 };
@@ -93,13 +93,12 @@ describe("renderHtml", () => {
     expect(html).toMatch(/<\/div>$/);
     expect(html).toContain("<b>📝 Koe 12:00 – Biologia: Kappaleet 1–4</b>");
     expect(html).toContain("<b>8:15–9:00</b> Fysiikka · A203<br><b>9:00–9:45</b>");
-    const gap = HTML_ITEM_GAP;
-    expect(html).toContain(`<b>📚 3 läksyä</b>${gap}• <b>Biologia</b> – <b>huomiselle</b>: Lue kappale 4 <i>(annettu ti 13.10.)</i>${gap}• <b>Englanti</b>`);
+    expect(html).toContain(`<b>📚 3 läksyä</b><br>• <b>Biologia</b> – <b>huomiselle</b>: Lue kappale 4 <i>(annettu ti 13.10.)</i><br>• <b>Englanti</b>`);
     expect(html).toContain("Tee *kaikki* &lt;b&gt;tehtävät&lt;/b&gt; &amp; muut");
-    expect(html).toContain(`<b>📝 Tulevat kokeet</b>${gap}• <b>Fysiikka</b> – <b>21.10.</b>: Luvut 1–3`);
-    expect(html).toContain(`<b>✉️ 1 lukematon viesti</b>${gap}• Retkipäivä perjantaina – Virtanen Ville`);
+    expect(html).toContain(`<b>📝 Tulevat kokeet</b><br>• <b>Fysiikka</b> – <b>21.10.</b>: Luvut 1–3`);
+    expect(html).toContain(`<b>✉️ 1 lukematon viesti</b><br>• Retkipäivä perjantaina – Virtanen Ville`);
     expect(html).not.toMatch(/ha-alert|\*\*|\n/);
-    expect(html.replace(/<\/?(big|small|b|i|br)>|<div style="text-align:start">|<\/div>/g, "")).not.toMatch(/<[a-z]/);
+    expect(html.replace(/<\/?(big|b|i|br)>|<div style="text-align:start">|<\/div>/g, "")).not.toMatch(/<[a-z]/);
   });
 
   it("aligns the HTML card as configured", async () => {

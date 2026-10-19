@@ -86,7 +86,7 @@ cards:
 
 ### Widgets that only show HTML
 
-Some widgets, such as the Android app's template widget, show HTML instead of Markdown. The `html` attribute has the same content using only `<big>` (the heading), `<small>` (small gaps between items), `<b>`, `<i>` and `<br>`, inside one `<div>` that is left-aligned by default (`html_align`). Use it there:
+Some widgets, such as the Android app's template widget, show HTML instead of Markdown. The `html` attribute has the same content using only `<big>` (the heading), `<b>`, `<i>` and `<br>`, inside one `<div>` that is left-aligned by default (`html_align`). Use it there:
 
 ```
 {{ state_attr('sensor.wilma_aino_briefing', 'html') }}

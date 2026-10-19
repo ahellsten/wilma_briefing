@@ -265,14 +265,6 @@ function esc(text: string): string {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 
-/**
- * A short empty line between box items: Android sizes each line by its
- * largest text, so an empty line in <small><small> (about 64 %) is a small
- * gap. Its line break must be inside the <small> too, or the line is full
- * height. A wrapped item keeps normal spacing inside it.
- */
-export const HTML_ITEM_GAP = "<br><small><small>&nbsp;<br></small></small>";
-
 function spansHtml(spans: Span[]): string {
   return spans
     .map((x) =>
@@ -288,7 +280,7 @@ function spansHtml(spans: Span[]): string {
 }
 
 /**
- * The same card as simple HTML: <big>, <small>, <b>, <i> and <br> in one aligned <div>, which
+ * The same card as simple HTML: <big>, <b>, <i> and <br> in one aligned <div>, which
  * widgets with basic HTML support (Android's Html.fromHtml) understand. Boxes
  * become a bold title line with the items under it.
  */
@@ -305,7 +297,7 @@ export function renderHtml(b: Briefing, lang: Language, opts: RenderOptions = {}
         case "lines":
           return block.lines.map(spansHtml).join("<br>");
         case "box":
-          return `<b>${block.icon ? `${block.icon} ` : ""}${spansHtml(block.title)}</b>${block.items.map((i) => `${HTML_ITEM_GAP}• ${spansHtml(i)}`).join("")}`;
+          return `<b>${block.icon ? `${block.icon} ` : ""}${spansHtml(block.title)}</b>${block.items.map((i) => `<br>• ${spansHtml(i)}`).join("")}`;
       }
     })
     .filter(Boolean)
