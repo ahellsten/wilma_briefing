@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.7
+
+- Remove the gap between box items in the `html` attribute again: it couldn't be made small enough in the Android widget.
+
 ## 0.3.6
 
 - Fix the gap between box items in the `html` attribute being as tall as a full line in the Android widget.
