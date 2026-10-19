@@ -1,5 +1,5 @@
 name: Wilma Briefing
-version: "0.3.3"
+version: "0.3.4"
 slug: wilma_briefing
 description: Wilma school schedule, homework and unread messages as Home Assistant entities
 arch: [amd64, aarch64]

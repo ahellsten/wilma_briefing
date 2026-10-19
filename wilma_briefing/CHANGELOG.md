@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.4
 
 - Unread messages come before the upcoming exams, and the upcoming exams box is orange.
 - Box headings on the card are bold.
