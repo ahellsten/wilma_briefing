@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.8
 
 - `notify_services` also accepts notify entities (e.g. `my_phone` for `notify.my_phone`), which are sent with `notify.send_message`. Before, these failed with "HTTP 400".
 - The notify targets are checked at startup. A target that is neither a service nor an entity turns on `binary_sensor.wilma_problem`, and the log lists the notify entities and services that exist, instead of a bare "HTTP 400" at notification time.
