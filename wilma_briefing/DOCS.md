@@ -17,6 +17,8 @@ Shows your children's next school day from [Wilma](https://www.visma.fi/wilma/) 
 | `language` | `fi` | `fi` or `en` |
 | `name_display` | `first` | `first`: show only the child's first name; `full`: the full name as Wilma gives it |
 | `show_rooms` | `false` | Show the classroom after each lesson |
+| `html_align` | `left` | `left`, `center` or `right`: alignment of the `html` attribute (for widgets) |
+| `html_min_lines` | `30` | Pad the `html` attribute with empty lines to this many lines (0 = off) |
 | `cutoff_time` | `16:00` | Before this time the card shows today; after it, the next school day |
 | `days_ahead` | `1` | School days to show after the cutoff (1–5) |
 | `homework_lookback_days` | `7` | How far back to look for homework |
@@ -84,11 +86,13 @@ cards:
 
 ### Widgets that only show HTML
 
-Some widgets, such as the Android app's template widget, show HTML instead of Markdown. The `html` attribute has the same content using only `<b>`, `<i>` and `<br>`, so use it there:
+Some widgets, such as the Android app's template widget, show HTML instead of Markdown. The `html` attribute has the same content using only `<b>`, `<i>` and `<br>`, inside one `<div>` that is left-aligned by default (`html_align`). Use it there:
 
 ```
 {{ state_attr('sensor.wilma_aino_briefing', 'html') }}
 ```
+
+The HTML can set only the horizontal alignment. The Android widget centres the text vertically, so the card is padded with empty lines at the end up to `html_min_lines` lines (30 by default). The text then starts from the top, and the widget cuts the extra lines off at the bottom. If your widget fits more than 30 lines, raise the value. Set it to 0 if your widget handles alignment itself.
 
 ## Instant alert for new messages (optional)
 

@@ -47,7 +47,7 @@ async function main() {
     },
     publish: (data, today, minutes) => {
       for (const b of briefings(data, today, minutes)) {
-        const render = { showRooms: opts.showRooms };
+        const render = { showRooms: opts.showRooms, htmlAlign: opts.htmlAlign, htmlMinLines: opts.htmlMinLines };
         ha.publishBriefing(b, briefingState(b, opts.language), renderMarkdown(b, opts.language, render), renderHtml(b, opts.language, render));
       }
     },

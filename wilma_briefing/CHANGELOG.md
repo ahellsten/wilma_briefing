@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- The `html` attribute is left-aligned instead of centred in the Android widget. New `html_align` option: `left`, `center` or `right`.
+- New `html_min_lines` option (default 30): pads the `html` attribute with empty lines so a widget that centres its text shows it from the top.
+
 ## 0.3.0
 
 - Homework is shown in its own green box above the upcoming exams, instead of under each lesson. Each item shows the subject, its due day and the day it was given, and stays listed until the subject's next lesson has passed.

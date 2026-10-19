@@ -89,7 +89,8 @@ describe("renderHtml", () => {
     const data = await loadData();
     data.students[0].homework[1].homework = "Tee *kaikki* <b>tehtävät</b> & muut";
     const html = renderHtml(buildBriefing(data.students[0], WED, 17 * 60, cfg), "fi", { showRooms: true });
-    expect(html).toMatch(/^<b>Aino Esimerkki – huomenna to 15\.10\. · 8:15–14:00<\/b><br><br>/);
+    expect(html).toMatch(/^<div style="text-align:start"><b>Aino Esimerkki – huomenna to 15\.10\. · 8:15–14:00<\/b><br><br>/);
+    expect(html).toMatch(/<\/div>$/);
     expect(html).toContain("<b>📝 Koe 12:00 – Biologia: Kappaleet 1–4</b>");
     expect(html).toContain("<b>8:15–9:00</b> Fysiikka · A203<br><b>9:00–9:45</b>");
     expect(html).toContain("<b>📚 3 läksyä</b><br>• <b>Biologia</b> – huomiselle: Lue kappale 4 <i>(annettu ti 13.10.)</i>");
@@ -97,6 +98,26 @@ describe("renderHtml", () => {
     expect(html).toContain("<b>Tulevat kokeet:</b> ke 21.10. Fysiikka");
     expect(html).toContain("<b>✉️ 1 lukematon viesti</b><br>• Retkipäivä perjantaina – Virtanen Ville");
     expect(html).not.toMatch(/ha-alert|\*\*|\n/);
-    expect(html.replace(/<\/?(b|i|br)>/g, "")).not.toMatch(/<[a-z]/);
+    expect(html.replace(/<\/?(b|i|br)>|<div style="text-align:start">|<\/div>/g, "")).not.toMatch(/<[a-z]/);
+  });
+
+  it("aligns the HTML card as configured", async () => {
+    const data = await loadData();
+    const b = buildBriefing(data.students[0], WED, 17 * 60, cfg);
+    expect(renderHtml(b, "fi", { htmlAlign: "center" })).toMatch(/^<div style="text-align:center">/);
+    expect(renderHtml(b, "fi", { htmlAlign: "right" })).toMatch(/^<div style="text-align:end">/);
+  });
+
+  it("pads the HTML card to the configured number of lines", async () => {
+    const data = await loadData();
+    const b = buildBriefing(data.students[0], WED, 17 * 60, cfg);
+    const lines = (html: string) => html.split("<br>").length;
+    const plain = renderHtml(b, "fi");
+    expect(plain).not.toContain("&#8203;");
+    const padded = renderHtml(b, "fi", { htmlMinLines: 40 });
+    expect(lines(padded)).toBe(40);
+    expect(padded).toMatch(/(<br>)+&#8203;<\/div>$/);
+    // Already long enough: unchanged.
+    expect(renderHtml(b, "fi", { htmlMinLines: 3 })).toBe(plain);
   });
 });

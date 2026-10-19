@@ -16,6 +16,8 @@ options:
   language: fi
   name_display: first
   show_rooms: false
+  html_align: left
+  html_min_lines: 30
   cutoff_time: "16:00"
   days_ahead: 1
   homework_lookback_days: 7
@@ -33,6 +35,8 @@ schema:
   language: list(fi|en)
   name_display: list(first|full)
   show_rooms: bool
+  html_align: list(left|center|right)
+  html_min_lines: int(0,100)
   cutoff_time: "match(^([01]?[0-9]|2[0-3]):[0-5][0-9]$)"
   days_ahead: int(1,5)
   homework_lookback_days: int(1,21)

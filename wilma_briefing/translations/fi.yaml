@@ -19,6 +19,12 @@ configuration:
   show_rooms:
     name: Näytä luokkahuoneet
     description: Näytä luokkahuone jokaisen tunnin perässä.
+  html_align:
+    name: Widgetin tekstin tasaus
+    description: HTML-version (html-attribuutti) vaakatasaus, esim. Androidin template-widgetissä.
+  html_min_lines:
+    name: Widgetin rivimäärä
+    description: Täydennä HTML-versio tyhjillä riveillä tähän rivimäärään asti, jotta tekstiä keskittävä widget näyttää sen ylhäältä alkaen. Vähintään widgetiin mahtuvien rivien määrä. 0 = pois.
   cutoff_time:
     name: Seuraavaan päivään klo
     description: Tämän kellonajan (HH:MM) jälkeen kortti näyttää seuraavan koulupäivän ja päivän ilmoitus lähetetään.

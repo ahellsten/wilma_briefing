@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { parseHHMM } from "./dates.js";
-import type { Language } from "./render.js";
+import type { HtmlAlign, Language } from "./render.js";
 import type { NameDisplay } from "./wilma.js";
 
 export interface Options {
@@ -11,6 +11,8 @@ export interface Options {
   language: Language;
   nameDisplay: NameDisplay;
   showRooms: boolean;
+  htmlAlign: HtmlAlign;
+  htmlMinLines: number;
   cutoffMinutes: number;
   daysAhead: number;
   lookbackDays: number;
@@ -43,6 +45,8 @@ export function loadOptions(path = process.env.OPTIONS_PATH ?? "/data/options.js
     language: raw.language === "en" ? "en" : "fi",
     nameDisplay: raw.name_display === "full" ? "full" : "first",
     showRooms: raw.show_rooms === true,
+    htmlMinLines: clampInt(raw.html_min_lines, 0, 100, 30),
+    htmlAlign: raw.html_align === "center" || raw.html_align === "right" ? raw.html_align : "left",
     cutoffMinutes: parseHHMM(raw.cutoff_time ?? "16:00"),
     daysAhead: clampInt(raw.days_ahead, 1, 5, 1),
     lookbackDays: clampInt(raw.homework_lookback_days, 1, 21, 7),

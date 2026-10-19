@@ -7,7 +7,19 @@ export type Language = "fi" | "en";
 export interface RenderOptions {
   /** Show the classroom after each lesson. */
   showRooms?: boolean;
+  /** Horizontal alignment of the HTML card (default left). */
+  htmlAlign?: HtmlAlign;
+  /**
+   * Pad the HTML card with empty lines up to this many lines. A widget that
+   * centres its text vertically then shows it from the top. 0 = no padding.
+   */
+  htmlMinLines?: number;
 }
+
+export type HtmlAlign = "left" | "center" | "right";
+
+/** Android's Html.fromHtml only knows start/center/end. */
+const CSS_ALIGN: Record<HtmlAlign, string> = { left: "start", center: "center", right: "end" };
 
 const STRINGS = {
   fi: {
@@ -251,12 +263,12 @@ function spansHtml(spans: Span[]): string {
 }
 
 /**
- * The same card as simple HTML: only <b>, <i> and <br>, which widgets with
- * basic HTML support (Android's Html.fromHtml) understand. Boxes become a
- * bold title line with the items under it.
+ * The same card as simple HTML: <b>, <i> and <br> in one aligned <div>, which
+ * widgets with basic HTML support (Android's Html.fromHtml) understand. Boxes
+ * become a bold title line with the items under it.
  */
 export function renderHtml(b: Briefing, lang: Language, opts: RenderOptions = {}): string {
-  return blocks(b, lang, opts)
+  const body = blocks(b, lang, opts)
     .map((block) => {
       switch (block.kind) {
         case "title":
@@ -272,6 +284,11 @@ export function renderHtml(b: Briefing, lang: Language, opts: RenderOptions = {}
     })
     .filter(Boolean)
     .join("<br><br>");
+  // Lines as written; long lines that wrap in the widget count as one.
+  const pad = Math.max(0, (opts.htmlMinLines ?? 0) - (body.split("<br>").length));
+  // The zero-width space keeps the padding from being trimmed as whitespace.
+  const padding = pad ? "<br>".repeat(pad) + "&#8203;" : "";
+  return `<div style="text-align:${CSS_ALIGN[opts.htmlAlign ?? "left"]}">${body}${padding}</div>`;
 }
 
 /** New grades the notification hasn't mentioned yet. */

@@ -19,6 +19,12 @@ configuration:
   show_rooms:
     name: Show classrooms
     description: Show the classroom after each lesson on the card.
+  html_align:
+    name: Widget text alignment
+    description: Horizontal alignment of the card's HTML version (the html attribute), used by e.g. the Android template widget.
+  html_min_lines:
+    name: Widget lines
+    description: Pad the HTML version with empty lines up to this many lines, so a widget that centres its text shows it from the top. Should be at least the number of lines your widget fits. 0 = off.
   cutoff_time:
     name: Switch to next day at
     description: After this time (HH:MM) the card shows the next school day and the daily notification is sent.
