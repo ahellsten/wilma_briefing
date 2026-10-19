@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.5
 
 - In the `html` attribute, box items are separated by a small gap so separate homework items, exams and messages are easier to tell apart.
 
