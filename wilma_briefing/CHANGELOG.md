@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- In the `html` attribute, box items are separated by a small gap so separate homework items, exams and messages are easier to tell apart.
+
 ## 0.3.4
 
 - Unread messages come before the upcoming exams, and the upcoming exams box is orange.
