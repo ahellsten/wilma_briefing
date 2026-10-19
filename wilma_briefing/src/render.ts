@@ -266,11 +266,12 @@ function esc(text: string): string {
 }
 
 /**
- * A short empty line between box items: Android sizes each line by its font,
- * so an empty line in <small><small> (about 64 %) is a small gap. A wrapped
- * item keeps normal spacing inside it.
+ * A short empty line between box items: Android sizes each line by its
+ * largest text, so an empty line in <small><small> (about 64 %) is a small
+ * gap. Its line break must be inside the <small> too, or the line is full
+ * height. A wrapped item keeps normal spacing inside it.
  */
-export const HTML_ITEM_GAP = "<br><small><small>&nbsp;</small></small>";
+export const HTML_ITEM_GAP = "<br><small><small>&nbsp;<br></small></small>";
 
 function spansHtml(spans: Span[]): string {
   return spans
@@ -304,7 +305,7 @@ export function renderHtml(b: Briefing, lang: Language, opts: RenderOptions = {}
         case "lines":
           return block.lines.map(spansHtml).join("<br>");
         case "box":
-          return `<b>${block.icon ? `${block.icon} ` : ""}${spansHtml(block.title)}</b>${block.items.map((i) => `${HTML_ITEM_GAP}<br>• ${spansHtml(i)}`).join("")}`;
+          return `<b>${block.icon ? `${block.icon} ` : ""}${spansHtml(block.title)}</b>${block.items.map((i) => `${HTML_ITEM_GAP}• ${spansHtml(i)}`).join("")}`;
       }
     })
     .filter(Boolean)

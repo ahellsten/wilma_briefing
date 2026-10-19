@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Fix the gap between box items in the `html` attribute being as tall as a full line in the Android widget.
+
 ## 0.3.5
 
 - In the `html` attribute, box items are separated by a small gap so separate homework items, exams and messages are easier to tell apart.
