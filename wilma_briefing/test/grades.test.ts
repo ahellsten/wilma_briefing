@@ -49,10 +49,10 @@ describe("new grades", () => {
     expect(aino.newGrades.map((g) => g.examId)).toEqual([801, 802]);
     const fi = renderMarkdown(aino, "fi");
     expect(fi).toContain(
-      '<ha-alert alert-type="info">🎓 2 uutta arvosanaa<br>• **Englanti** – Sanakoe: 9½ *(koe 12.10.)*<br>• **Kuvataide**: Hienoa työtä \\<3 *(koe 9.10.)*</ha-alert>'
+      '<ha-alert alert-type="info">**🎓 2 uutta arvosanaa**<br>• **Englanti** – Sanakoe: 9½ *(koe 12.10.)*<br>• **Kuvataide**: Hienoa työtä \\<3 *(koe 9.10.)*</ha-alert>'
     );
     expect(fi.indexOf("🎓")).toBeLessThan(fi.indexOf("Tulevat kokeet"));
-    expect(renderMarkdown(aino, "en")).toContain("🎓 2 new grades<br>• **Englanti** – Sanakoe: 9½ *(exam 12 Oct)*");
+    expect(renderMarkdown(aino, "en")).toContain("**🎓 2 new grades**<br>• **Englanti** – Sanakoe: 9½ *(exam 12 Oct)*");
 
     // Seen on 13 Oct: still new on the 19th, gone on the 20th.
     expect(buildBriefing(withSeen(data.students, seen)[0], "2026-10-19", 8 * 60, cfg).newGrades).toHaveLength(2);

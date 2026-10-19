@@ -25,20 +25,21 @@ describe("renderMarkdown", () => {
     expect(fi).toMatch(/^\*\*8:15–9:00\*\* Fysiikka {2}$/m); // rooms hidden by default
     expect(renderMarkdown(aino, "fi", { showRooms: true })).toContain("**8:15–9:00** Fysiikka · A203");
     expect(fi).toContain(
-      '<ha-alert alert-type="success">📚 3 läksyä' +
+      '<ha-alert alert-type="success">**📚 3 läksyä**' +
         "<br>• **Biologia** – **huomiselle**: Lue kappale 4 *(annettu ti 13.10.)*" +
         "<br>• **Englanti** – **huomiselle**: Unit 3 sanat *(annettu ke 14.10.)*" +
         "<br>• **Fysiikka** – **huomiselle**: s. 45 teht. 1–5 *(annettu ti 13.10.)*</ha-alert>"
     );
     expect(fi).not.toContain("> 📚");
     expect(fi.indexOf("📚")).toBeLessThan(fi.indexOf("Tulevat kokeet"));
-    expect(fi).toContain('<ha-alert alert-type="warning">Koe 12:00 – Biologia: Kappaleet 1–4</ha-alert>');
-    expect(fi).toContain('<ha-alert alert-type="info">📝 Tulevat kokeet<br>• **Fysiikka** – **21.10.**: Luvut 1–3</ha-alert>');
-    expect(fi).toContain("✉️ 1 lukematon viesti<br>• Retkipäivä perjantaina – Virtanen Ville");
+    expect(fi.indexOf("✉️")).toBeLessThan(fi.indexOf("Tulevat kokeet"));
+    expect(fi).toContain('<ha-alert alert-type="warning">**Koe 12:00 – Biologia: Kappaleet 1–4**</ha-alert>');
+    expect(fi).toContain('<ha-alert alert-type="warning">**📝 Tulevat kokeet**<br>• **Fysiikka** – **21.10.**: Luvut 1–3</ha-alert>');
+    expect(fi).toContain("**✉️ 1 lukematon viesti**<br>• Retkipäivä perjantaina – Virtanen Ville");
     expect(briefingState(aino, "fi")).toBe("Huomenna to 15.10.");
 
     const en = renderMarkdown(aino, "en");
-    expect(en).toContain("📚 3 homework<br>• **Biologia** – **for tomorrow**: Lue kappale 4 *(given Tue 13 Oct)*");
+    expect(en).toContain("**📚 3 homework**<br>• **Biologia** – **for tomorrow**: Lue kappale 4 *(given Tue 13 Oct)*");
     expect(en).toContain("1 unread message");
   });
 

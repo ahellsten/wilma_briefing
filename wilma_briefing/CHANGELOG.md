@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Unread messages come before the upcoming exams, and the upcoming exams box is orange.
+- Box headings on the card are bold.
+
 ## 0.3.3
 
 - The homework due day is bold, like the subject.

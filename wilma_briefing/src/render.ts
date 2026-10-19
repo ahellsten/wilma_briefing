@@ -201,12 +201,20 @@ function blocks(b: Briefing, lang: Language, opts: RenderOptions): Block[] {
     });
   }
 
+  if (b.unreadCount > 0) {
+    out.push({
+      kind: "box",
+      type: "info",
+      title: [`✉️ ${s.unread(b.unreadCount)}`],
+      items: b.unreadMessages.slice(0, 5).map((m) => [w(m.subject), ...(m.senderName ? [" – ", w(m.senderName)] : [])]),
+    });
+  }
   const shown = new Set(b.days.flatMap((d) => d.exams.map((e) => e.examId)));
   const later = b.upcomingExams.filter((e) => !shown.has(e.examId)).slice(0, 3);
   if (later.length) {
     out.push({
       kind: "box",
-      type: "info",
+      type: "warning",
       title: [`📝 ${s.upcoming}`],
       items: later.map((e) => [
         { b: [w(e.subject || e.name)] },
@@ -217,14 +225,6 @@ function blocks(b: Briefing, lang: Language, opts: RenderOptions): Block[] {
     });
   }
 
-  if (b.unreadCount > 0) {
-    out.push({
-      kind: "box",
-      type: "info",
-      title: [`✉️ ${s.unread(b.unreadCount)}`],
-      items: b.unreadMessages.slice(0, 5).map((m) => [w(m.subject), ...(m.senderName ? [" – ", w(m.senderName)] : [])]),
-    });
-  }
   if (b.warnings.length) out.push({ kind: "box", type: "error", icon: "⚠️", title: [s.warning], items: [] });
   return out;
 }
@@ -254,7 +254,7 @@ export function renderMarkdown(b: Briefing, lang: Language, opts: RenderOptions 
         case "lines":
           return block.lines.map((l) => `${spansMd(l)}  `).join("\n");
         case "box":
-          return `<ha-alert alert-type="${block.type}">${spansMd(block.title)}${block.items.map((i) => `<br>• ${spansMd(i)}`).join("")}</ha-alert>`;
+          return `<ha-alert alert-type="${block.type}">**${spansMd(block.title)}**${block.items.map((i) => `<br>• ${spansMd(i)}`).join("")}</ha-alert>`;
       }
     })
     .filter(Boolean)
