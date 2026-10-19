@@ -89,7 +89,7 @@ describe("renderHtml", () => {
     const data = await loadData();
     data.students[0].homework[1].homework = "Tee *kaikki* <b>tehtävät</b> & muut";
     const html = renderHtml(buildBriefing(data.students[0], WED, 17 * 60, cfg), "fi", { showRooms: true });
-    expect(html).toMatch(/^<div style="text-align:start"><b>Aino Esimerkki – huomenna to 15\.10\. · 8:15–14:00<\/b><br><br>/);
+    expect(html).toMatch(/^<div style="text-align:start"><big><b>Aino Esimerkki – huomenna to 15\.10\. · 8:15–14:00<\/b><\/big><br><br>/);
     expect(html).toMatch(/<\/div>$/);
     expect(html).toContain("<b>📝 Koe 12:00 – Biologia: Kappaleet 1–4</b>");
     expect(html).toContain("<b>8:15–9:00</b> Fysiikka · A203<br><b>9:00–9:45</b>");
@@ -98,7 +98,7 @@ describe("renderHtml", () => {
     expect(html).toContain("<b>Tulevat kokeet:</b> ke 21.10. Fysiikka");
     expect(html).toContain("<b>✉️ 1 lukematon viesti</b><br>• Retkipäivä perjantaina – Virtanen Ville");
     expect(html).not.toMatch(/ha-alert|\*\*|\n/);
-    expect(html.replace(/<\/?(b|i|br)>|<div style="text-align:start">|<\/div>/g, "")).not.toMatch(/<[a-z]/);
+    expect(html.replace(/<\/?(big|b|i|br)>|<div style="text-align:start">|<\/div>/g, "")).not.toMatch(/<[a-z]/);
   });
 
   it("aligns the HTML card as configured", async () => {

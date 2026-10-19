@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- The heading of the `html` attribute (name and day) is larger (`<big>`), so it stands out in the widget.
+
 ## 0.3.1
 
 - The `html` attribute is left-aligned instead of centred in the Android widget. New `html_align` option: `left`, `center` or `right`.

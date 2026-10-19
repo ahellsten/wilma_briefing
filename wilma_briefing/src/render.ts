@@ -263,7 +263,7 @@ function spansHtml(spans: Span[]): string {
 }
 
 /**
- * The same card as simple HTML: <b>, <i> and <br> in one aligned <div>, which
+ * The same card as simple HTML: <big>, <b>, <i> and <br> in one aligned <div>, which
  * widgets with basic HTML support (Android's Html.fromHtml) understand. Boxes
  * become a bold title line with the items under it.
  */
@@ -272,6 +272,7 @@ export function renderHtml(b: Briefing, lang: Language, opts: RenderOptions = {}
     .map((block) => {
       switch (block.kind) {
         case "title":
+          return `<big><b>${spansHtml(block.spans)}</b></big>`;
         case "heading":
           return `<b>${spansHtml(block.spans)}</b>`;
         case "text":
