@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.2
 
 - The heading of the `html` attribute (name and day) is larger (`<big>`), so it stands out in the widget.
 
