@@ -53,3 +53,7 @@ docker run --rm --network host -v "$PWD/.data:/data" \
 # .data/options.json holds the add-on options (see wilma_briefing/config.yaml)
 mosquitto_sub -h localhost -t 'homeassistant/#' -t 'wilma_briefing/#' -v
 ```
+
+## License
+
+[MIT](LICENSE). The Docker image also installs [WilmAI](https://github.com/aikarjal/wilmai) (`@wilm-ai/wilma-cli`), which is MIT-licensed by Wilm.ai and ships with its own license file.
