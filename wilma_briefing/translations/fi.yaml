@@ -50,4 +50,4 @@ configuration:
     description: Lähetä yhteenveto koulupäivää edeltävänä iltana.
   notify_services:
     name: Ilmoituspalvelut
-    description: Notify-palvelut ilman "notify."-etuliitettä, esim. mobile_app_puhelin.
+    description: Notify-palvelut tai notify-entiteetit ilman "notify."-etuliitettä, esim. mobile_app_puhelin tai puhelin.

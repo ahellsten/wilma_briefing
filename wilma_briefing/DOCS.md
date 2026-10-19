@@ -26,7 +26,7 @@ Shows your children's next school day from [Wilma](https://www.visma.fi/wilma/) 
 | `refresh_interval_minutes` | `60` | Fetch interval during active hours |
 | `active_hours_start` / `_end` | `06:30` / `21:30` | No fetching outside these hours |
 | `notify_enabled` | `true` | Daily notification |
-| `notify_services` | `[]` | e.g. `mobile_app_my_phone` (without `notify.`) |
+| `notify_services` | `[]` | Notify services or notify entities without `notify.`, e.g. `mobile_app_my_phone` or `my_phone`. Entities are sent to with `notify.send_message`. Names are checked at startup; see `binary_sensor.wilma_problem` and the log |
 
 ## Entities
 
@@ -44,7 +44,7 @@ The add-on device has three more entities:
 
 - `button.wilma_refresh`: fetch now. Presses within 5 minutes of the last fetch are ignored.
 - `sensor.wilma_last_update`: when data was last fetched.
-- `binary_sensor.wilma_problem`: on when a fetch failed or some data was missing. The `error` attribute says why.
+- `binary_sensor.wilma_problem`: on when a fetch failed, some data was missing or a notify target doesn't exist. The `error` attribute says why.
 
 ## How homework is matched
 

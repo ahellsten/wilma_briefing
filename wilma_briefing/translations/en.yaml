@@ -50,4 +50,4 @@ configuration:
     description: Send a summary on the evening before each school day.
   notify_services:
     name: Notify services
-    description: Notify services without the "notify." prefix, e.g. mobile_app_my_phone.
+    description: Notify services or notify entities without the "notify." prefix, e.g. mobile_app_my_phone or my_phone.

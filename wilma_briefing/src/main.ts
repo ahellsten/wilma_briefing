@@ -7,7 +7,7 @@ import { brokerConfig, HaMqtt } from "./mqtt.js";
 import { loadOptions } from "./options.js";
 import { briefingState, renderHtml, renderMarkdown, renderNotification, unnotifiedGrades } from "./render.js";
 import { Scheduler, type PersistedState } from "./scheduler.js";
-import { notify } from "./supervisor.js";
+import { checkNotifyTargets, notify } from "./supervisor.js";
 import { applyNameDisplay, cliRunner, fetchAll, wilmaEnv, type FetchResult } from "./wilma.js";
 
 const STATE_PATH = process.env.STATE_PATH ?? "/data/state.json";
@@ -35,6 +35,19 @@ async function main() {
   const briefings = (data: FetchResult, today: string, minutes: number): Briefing[] =>
     withSeen(data.students, gradesSeen).map((s) => buildBriefing(s, today, minutes, cfg));
 
+  // Status from the last fetch, combined with any problem in the notify targets.
+  type Status = Parameters<HaMqtt["publishStatus"]>[0];
+  let fetchStatus: Status = { problem: null };
+  let notifyProblem: string | null = null;
+  const publishStatus = () => {
+    const problems = [fetchStatus.problem, notifyProblem].filter(Boolean);
+    ha.publishStatus({
+      ...fetchStatus,
+      problem: problems.length ? problems.join("; ") : null,
+      code: fetchStatus.code ?? (notifyProblem ? "notify_target" : undefined),
+    });
+  };
+
   let scheduler: Scheduler | undefined;
   const ha = await HaMqtt.connect(await brokerConfig(), () => scheduler?.requestRefresh(), log);
   log(`Connected to MQTT; time zone ${timeZone}`);
@@ -52,7 +65,10 @@ async function main() {
         ha.publishBriefing(b, briefingState(b, opts.language), renderMarkdown(b, opts.language, render), renderHtml(b, opts.language, render));
       }
     },
-    publishStatus: (status) => ha.publishStatus(status),
+    publishStatus: (status) => {
+      fetchStatus = status;
+      publishStatus();
+    },
     notify: async (data, today) => {
       // Called after the cutoff: briefings show the next school day(s).
       const list = briefings(data, today, 24 * 60);
@@ -78,6 +94,14 @@ async function main() {
     log,
   });
   scheduler.start();
+
+  if (opts.notifyEnabled) {
+    notifyProblem = await checkNotifyTargets(opts.notifyServices);
+    if (notifyProblem) {
+      log(`Notify target problem: ${notifyProblem}`);
+      publishStatus();
+    }
+  }
 
   const shutdown = async () => {
     log("Stopping");
