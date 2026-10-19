@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.1
 
 - The `html` attribute is left-aligned instead of centred in the Android widget. New `html_align` option: `left`, `center` or `right`.
 - New `html_min_lines` option (default 30): pads the `html` attribute with empty lines so a widget that centres its text shows it from the top.
