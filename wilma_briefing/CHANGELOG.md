@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.3
 
 - The homework due day is bold, like the subject.
 - Homework due next week shows its due day ("ma 26.10. mennessä") instead of "seuraavalle tunnille": next week's timetable is now fetched on every refresh, not only from Thursday on. Due dates also show the weekday.

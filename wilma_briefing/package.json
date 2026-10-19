@@ -1,6 +1,6 @@
 {
   "name": "wilma-briefing",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "private": true,
   "license": "MIT",
   "description": "Home Assistant add-on: Wilma school schedule, homework and messages as MQTT entities",
