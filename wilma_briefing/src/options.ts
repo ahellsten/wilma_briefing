@@ -10,6 +10,7 @@ export interface Options {
   totpSecret?: string;
   language: Language;
   nameDisplay: NameDisplay;
+  showRooms: boolean;
   cutoffMinutes: number;
   daysAhead: number;
   lookbackDays: number;
@@ -40,6 +41,7 @@ export function loadOptions(path = process.env.OPTIONS_PATH ?? "/data/options.js
     totpSecret: String(raw.wilma_totp_secret ?? "").trim() || undefined,
     language: raw.language === "en" ? "en" : "fi",
     nameDisplay: raw.name_display === "full" ? "full" : "first",
+    showRooms: raw.show_rooms === true,
     cutoffMinutes: parseHHMM(raw.cutoff_time ?? "16:00"),
     daysAhead: clampInt(raw.days_ahead, 1, 5, 1),
     lookbackDays: clampInt(raw.homework_lookback_days, 1, 21, 7),

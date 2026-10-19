@@ -11,6 +11,7 @@ Users may paste real `wilma … --json` output for debugging. Use it only in tem
 - In the schedule, `subjectCode` is just the first word of the caption (`"Englanti,"`, `"Musiikki.3"`). Homework has real course codes (`SUK_3LV`). Codes never match across the two sources, so `sameSubject` matches by **name** and falls back to codes only when a name is missing.
 - Homework `date` is the day of the lesson where it was given. There is no due date. Homework counts as due at the subject's next lesson: the newest item since that subject's previous lesson.
 - The timetable lists normal lessons during school holidays, and nothing marks a holiday (see BACKLOG.md).
+- `summary` merges the inbox and the appointments folder without deduping, so the same message can appear twice and be counted twice in `unreadMessages`. `fetchAll` dedupes by `wilmaId`.
 - Errors are printed as JSON on stdout: `{status:"error", code, message, hint}`. `login_failed`, `mfa_*`, `not_logged_in` and `config_invalid` are auth errors.
 - Every new Wilma login logs the parent out of their browser session. Keep refreshes infrequent and don't retry auth failures quickly.
 

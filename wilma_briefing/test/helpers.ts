@@ -11,6 +11,7 @@ export const fixtureRunner: Runner = async (args) => {
   if (cmd.startsWith("homework")) return fixture("homework");
   if (cmd === "schedule week") return fixture("schedule-week");
   if (cmd === "schedule next-week") return fixture("schedule-next-week");
+  if (cmd.startsWith("grades")) return fixture("grades");
   throw new Error(`unexpected command: ${cmd}`);
 };
 

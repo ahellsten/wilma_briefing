@@ -16,6 +16,9 @@ configuration:
   name_display:
     name: Lapsen nimi
     description: Näytä vain etunimi (oletus) tai koko nimi Wilman mukaan. Vaikuttaa myös laitteen ja entiteettien nimiin.
+  show_rooms:
+    name: Näytä luokkahuoneet
+    description: Näytä luokkahuone jokaisen tunnin perässä.
   cutoff_time:
     name: Seuraavaan päivään klo
     description: Tämän kellonajan (HH:MM) jälkeen kortti näyttää seuraavan koulupäivän ja päivän ilmoitus lähetetään.

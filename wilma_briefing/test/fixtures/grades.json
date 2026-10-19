@@ -1,0 +1,13 @@
+{
+  "students": [
+    {
+      "student": { "studentNumber": "1001", "name": "Aino Esimerkki" },
+      "grades": [
+        { "examId": 701, "date": "2026-10-12", "name": "Sanakoe", "subject": "Englanti", "subjectCode": "ENA_7", "grade": "9 1/2", "verbalGrade": null, "info": "Unit 2 sanat", "teacher": "Laine Liisa", "teacherCode": "LAL" },
+        { "examId": 702, "date": "2026-10-09", "name": "", "subject": "Kuvataide", "subjectCode": "KU_7", "grade": null, "verbalGrade": "Hienoa  työtä <3", "info": null, "teacher": "Mäki Maija", "teacherCode": "MAM" },
+        { "examId": 650, "date": "2026-09-20", "name": "Koe 1", "subject": "Fysiikka", "subjectCode": "FY_7", "grade": "8", "verbalGrade": null, "info": null, "teacher": "Virtanen Ville", "teacherCode": "VIV" }
+      ]
+    },
+    { "student": { "studentNumber": "1002", "name": "Eero Esimerkki" }, "grades": [] }
+  ]
+}

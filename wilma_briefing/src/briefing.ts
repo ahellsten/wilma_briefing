@@ -1,5 +1,5 @@
 import { addDays } from "./dates.js";
-import type { Exam, Homework, Lesson, MessageSummary, StudentData, StudentRef } from "./wilma.js";
+import type { Exam, Grade, Homework, Lesson, MessageSummary, StudentData, StudentRef } from "./wilma.js";
 
 export interface BriefingConfig {
   cutoffMinutes: number;
@@ -11,6 +11,11 @@ export interface BriefingLesson extends Lesson {
   homework: Homework[];
 }
 
+export interface OpenHomework extends Homework {
+  /** Date of the subject's next lesson after the homework was given. */
+  due: string | null;
+}
+
 export interface BriefingDay {
   date: string;
   lessons: BriefingLesson[];
@@ -19,15 +24,21 @@ export interface BriefingDay {
   exams: Exam[];
 }
 
+/** A grade counts as new for this many days after the add-on first saw it. */
+export const NEW_GRADE_DAYS = 7;
+
 export interface Briefing {
   student: StudentRef;
   today: string;
   /** "today" before the cutoff (when today is a school day), otherwise "next". */
   mode: "today" | "next";
   days: BriefingDay[];
-  homeworkCount: number;
+  /** Homework not yet due, soonest first. */
+  homework: OpenHomework[];
   upcomingExams: Exam[];
   nextExam: Exam | null;
+  /** Grades first seen within NEW_GRADE_DAYS, newest first. */
+  newGrades: Grade[];
   unreadMessages: MessageSummary[];
   unreadCount: number;
   warnings: string[];
@@ -81,24 +92,31 @@ export function sameSubject(a: { subject: string; subjectCode: string }, b: { su
 }
 
 /**
- * Homework due at a lesson on `date`. Wilma has no due dates, so homework
- * counts as due at the subject's next lesson: the newest items given since the
- * previous known lesson of the subject (and within the lookback window).
+ * Homework still to do on `from` (the first day shown). Wilma has no due dates,
+ * so homework counts as due at the subject's next lesson after the day it was
+ * given. Newer homework of the subject marks a lesson too (it is dated on one),
+ * which covers lessons missing from the fetched schedule. `due` is null when
+ * neither shows the next lesson.
  */
-export function homeworkFor(lesson: Lesson, allLessons: Lesson[], homework: Homework[], lookbackDays: number): Homework[] {
-  const windowStart = addDays(lesson.date, -lookbackDays);
-  const previous = allLessons
-    .filter((l) => l.date < lesson.date && l.date >= windowStart && sameSubject(l, lesson))
-    .map((l) => l.date)
-    .sort()
-    .pop();
-  const from = previous ?? windowStart;
-  const due = homework
-    .filter((h) => h.date >= from && h.date < lesson.date && sameSubject(h, lesson))
-    .sort((a, b) => b.date.localeCompare(a.date));
-  // Homework is dated on a lesson of the subject, so anything older than the
-  // newest item was due by then (covers lessons missing from the schedule).
-  return due.filter((h) => h.date === due[0].date);
+export function openHomework(lessons: Lesson[], homework: Homework[], from: string, lookbackDays: number): OpenHomework[] {
+  const windowStart = addDays(from, -lookbackDays);
+  const next = (h: Homework) => {
+    const later = [...lessons, ...homework].filter((x) => x.date > h.date && sameSubject(x, h)).map((x) => x.date);
+    return later.length ? later.reduce((a, b) => (b < a ? b : a)) : null;
+  };
+  return homework
+    .filter((h) => h.date >= windowStart)
+    .map((h) => ({ ...h, due: next(h) }))
+    .filter((h) => h.due === null || h.due >= from)
+    .sort((a, b) => (a.due ?? "9999").localeCompare(b.due ?? "9999") || a.subject.localeCompare(b.subject));
+}
+
+export function newGrades(grades: Grade[], today: string): Grade[] {
+  const since = addDays(today, -(NEW_GRADE_DAYS - 1));
+  // Grades not tracked yet (no `seen`) are never new.
+  return grades
+    .filter((g) => g.seen !== undefined && g.seen >= since)
+    .sort((a, b) => b.seen!.localeCompare(a.seen!) || b.date.localeCompare(a.date));
 }
 
 export function buildBriefing(data: StudentData, today: string, nowMinutes: number, cfg: BriefingConfig): Briefing {
@@ -109,21 +127,23 @@ export function buildBriefing(data: StudentData, today: string, nowMinutes: numb
     cfg
   );
 
+  const homework = openHomework(data.lessons, data.homework, dates[0] ?? today, cfg.lookbackDays);
+
   const days = dates.map((date): BriefingDay => {
     const seenSubjects: Lesson[] = [];
-    const lessons = data.lessons
+    const dayLessons = data.lessons
       .filter((l) => l.date === date)
       .map((l): BriefingLesson => {
-        // A double lesson shows its homework once, on the first of the pair.
+        // A double lesson gets its homework once, on the first of the pair.
         const repeat = seenSubjects.some((s) => sameSubject(s, l));
         seenSubjects.push(l);
-        return { ...l, homework: repeat ? [] : homeworkFor(l, data.lessons, data.homework, cfg.lookbackDays) };
+        return { ...l, homework: repeat ? [] : homework.filter((h) => h.due === date && sameSubject(h, l)) };
       });
     return {
       date,
-      lessons,
-      firstStart: lessons[0]?.start ?? null,
-      lastEnd: lessons.reduce<string | null>((max, l) => (max === null || l.end > max ? l.end : max), null),
+      lessons: dayLessons,
+      firstStart: dayLessons[0]?.start ?? null,
+      lastEnd: dayLessons.reduce<string | null>((max, l) => (max === null || l.end > max ? l.end : max), null),
       exams: data.exams.filter((e) => e.date === date),
     };
   });
@@ -134,9 +154,10 @@ export function buildBriefing(data: StudentData, today: string, nowMinutes: numb
     today,
     mode,
     days,
-    homeworkCount: days.reduce((n, d) => n + d.lessons.reduce((m, l) => m + l.homework.length, 0), 0),
+    homework,
     upcomingExams,
     nextExam: upcomingExams[0] ?? null,
+    newGrades: newGrades(data.grades ?? [], today),
     unreadMessages: data.unreadMessages,
     unreadCount: data.unreadCount,
     warnings: data.warnings,

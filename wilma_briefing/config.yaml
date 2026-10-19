@@ -15,6 +15,7 @@ options:
   wilma_password: ""
   language: fi
   name_display: first
+  show_rooms: false
   cutoff_time: "16:00"
   days_ahead: 1
   homework_lookback_days: 7
@@ -30,6 +31,7 @@ schema:
   wilma_totp_secret: password?
   language: list(fi|en)
   name_display: list(first|full)
+  show_rooms: bool
   cutoff_time: "match(^([01]?[0-9]|2[0-3]):[0-5][0-9]$)"
   days_ahead: int(1,5)
   homework_lookback_days: int(1,21)

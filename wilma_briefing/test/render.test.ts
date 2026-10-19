@@ -22,16 +22,34 @@ describe("renderMarkdown", () => {
     const aino = buildBriefing(data.students[0], WED, 17 * 60, cfg);
     const fi = renderMarkdown(aino, "fi");
     expect(fi).toContain("### Aino Esimerkki – huomenna to 15.10. · 8:15–14:00");
-    expect(fi).toContain("**8:15–9:00** Fysiikka · A203");
-    expect(fi).toContain("> 📚 s. 45 teht. 1–5 *(annettu ti 13.10.)*");
+    expect(fi).toMatch(/^\*\*8:15–9:00\*\* Fysiikka {2}$/m); // rooms hidden by default
+    expect(renderMarkdown(aino, "fi", { showRooms: true })).toContain("**8:15–9:00** Fysiikka · A203");
+    expect(fi).toContain(
+      '<ha-alert alert-type="success">📚 3 läksyä' +
+        "<br>• **Biologia** – huomiselle: Lue kappale 4 *(annettu ti 13.10.)*" +
+        "<br>• **Englanti** – huomiselle: Unit 3 sanat *(annettu ke 14.10.)*" +
+        "<br>• **Fysiikka** – huomiselle: s. 45 teht. 1–5 *(annettu ti 13.10.)*</ha-alert>"
+    );
+    expect(fi).not.toContain("> 📚");
+    expect(fi.indexOf("📚")).toBeLessThan(fi.indexOf("Tulevat kokeet"));
     expect(fi).toContain('<ha-alert alert-type="warning">Koe 12:00 – Biologia: Kappaleet 1–4</ha-alert>');
     expect(fi).toContain("**Tulevat kokeet:** ke 21.10. Fysiikka");
     expect(fi).toContain("✉️ 1 lukematon viesti<br>• Retkipäivä perjantaina – Virtanen Ville");
     expect(briefingState(aino, "fi")).toBe("Huomenna to 15.10.");
 
     const en = renderMarkdown(aino, "en");
-    expect(en).toContain("*(given Tue 13 Oct)*");
+    expect(en).toContain("📚 3 homework<br>• **Biologia** – for tomorrow: Lue kappale 4 *(given Tue 13 Oct)*");
     expect(en).toContain("1 unread message");
+  });
+
+  it("labels homework due later by date only", async () => {
+    const data = await loadData();
+    const aino = buildBriefing(data.students[0], "2026-10-13", 8 * 60, cfg);
+    const md = renderMarkdown(aino, "fi");
+    expect(md).toContain("**Englanti** – huomiselle: Workbook p. 20");
+    expect(md).toContain("**Biologia** – 15.10. mennessä: Lue kappale 4");
+    expect(md).toContain("**Fysiikka** – tälle päivälle: s. 40 teht. 1–3");
+    expect(renderMarkdown(aino, "en")).toContain("**Biologia** – due 15 Oct: Lue kappale 4");
   });
 
   it("uses day headings when showing several days", async () => {

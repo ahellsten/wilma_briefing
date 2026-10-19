@@ -1,6 +1,6 @@
 # Wilma Briefing
 
-Shows your children's next school day from [Wilma](https://www.visma.fi/wilma/) in Home Assistant. It covers the lessons, any homework due at each lesson, exams and unread messages. It uses [WilmAI](https://github.com/aikarjal/wilmai) (`@wilm-ai/wilma-cli`) to read Wilma. Access is read-only: the add-on never sends anything to Wilma and never marks messages read.
+Shows your children's next school day from [Wilma](https://www.visma.fi/wilma/) in Home Assistant. It covers the lessons, homework that is still to do, exams, new grades and unread messages. It uses [WilmAI](https://github.com/aikarjal/wilmai) (`@wilm-ai/wilma-cli`) to read Wilma. Access is read-only: the add-on never sends anything to Wilma and never marks messages read.
 
 ## Requirements
 
@@ -16,6 +16,7 @@ Shows your children's next school day from [Wilma](https://www.visma.fi/wilma/) 
 | `wilma_totp_secret` | | Only for accounts with two-step verification |
 | `language` | `fi` | `fi` or `en` |
 | `name_display` | `first` | `first`: show only the child's first name; `full`: the full name as Wilma gives it |
+| `show_rooms` | `false` | Show the classroom after each lesson |
 | `cutoff_time` | `16:00` | Before this time the card shows today; after it, the next school day |
 | `days_ahead` | `1` | School days to show after the cutoff (1–5) |
 | `homework_lookback_days` | `7` | How far back to look for homework |
@@ -30,10 +31,11 @@ There is one device per child, named "Wilma <name>". With the default `name_disp
 
 | Entity | State | Attributes |
 |---|---|---|
-| `sensor.wilma_aino_briefing` | e.g. `Huomenna to 15.10.` | `markdown` (the card body), `days` (lessons with their homework), `target_dates`, `first_start`, `last_end` |
-| `sensor.wilma_aino_homework` | number of homework items due on the days shown | `items` |
+| `sensor.wilma_aino_briefing` | e.g. `Huomenna to 15.10.` | `markdown` (the card body), `html` (the same card as simple HTML, for widgets), `days` (lessons with the homework due at each), `target_dates`, `first_start`, `last_end` |
+| `sensor.wilma_aino_homework` | number of homework items still to do | `items` (subject, text, given, due, teacher) |
 | `sensor.wilma_aino_unread_messages` | number of unread messages | `messages` (subject, sender, sent_at) |
 | `sensor.wilma_aino_next_exam` | date of the next exam | subject, name, topic, time |
+| `sensor.wilma_aino_new_grades` | number of new grades | `items` (subject, name, grade, verbal_grade, info, exam_date, first_seen, teacher) |
 
 The add-on device has three more entities:
 
@@ -43,7 +45,11 @@ The add-on device has three more entities:
 
 ## How homework is matched
 
-Wilma records homework on the lesson where it was given and has no due date. The add-on treats homework as due at the **next lesson of the same subject**. For each lesson shown, it lists the newest homework given since that subject's previous lesson, within `homework_lookback_days`. Subjects match by name, so `Englanti` matches `Englanti, A1`. The course code is used only when a name is missing.
+Wilma records homework on the lesson where it was given and has no due date. The add-on treats homework as due at the **next lesson of the same subject**. The card lists homework in a green box, soonest first, with the due date and the day it was given. Each item stays listed until its due day has passed: homework given on Monday for a Friday lesson is shown from Monday evening until Friday's card moves on to the next school day. Homework older than `homework_lookback_days` is not listed. When the next lesson isn't in the fetched schedule, the item says "for the next lesson" ("seuraavalle tunnille"). Subjects match by name, so `Englanti` matches `Englanti, A1`. The course code is used only when a name is missing.
+
+## New grades
+
+A grade's date in Wilma is the day of the exam, and teachers often enter the grade days later. So the add-on remembers when it first saw each grade (in `/data/grades_seen.json`) and shows it as new for 7 days from then, in a blue box on the card. On the first start, the grades already in Wilma are not shown as new. Each new grade is also included once in the daily notification.
 
 ## When data is fetched
 
@@ -55,7 +61,7 @@ Wilma's data changes slowly, so hourly is plenty. Also, **each new Wilma login l
 
 ## Daily notification
 
-This is sent at `cutoff_time` on the **evening before a school day** to every service in `notify_services`. For a Monday it comes on Sunday evening, and holidays are skipped. It has one line per child: the school day's hours, which subjects have homework, any exams and the unread message count.
+This is sent at `cutoff_time` on the **evening before a school day** to every service in `notify_services`. For a Monday it comes on Sunday evening, and holidays are skipped. It has one line per child: the school day's hours, which subjects have homework, any exams, grades not announced before and the unread message count.
 
 ## Dashboard card
 
@@ -73,6 +79,14 @@ cards:
     content: "{{ state_attr('sensor.wilma_aino_briefing', 'markdown') }}"
   - type: markdown
     content: "{{ state_attr('sensor.wilma_eero_briefing', 'markdown') }}"
+```
+
+### Widgets that only show HTML
+
+Some widgets, such as the Android app's template widget, show HTML instead of Markdown. The `html` attribute has the same content using only `<b>`, `<i>` and `<br>`, so use it there:
+
+```
+{{ state_attr('sensor.wilma_aino_briefing', 'html') }}
 ```
 
 ## Instant alert for new messages (optional)
@@ -116,6 +130,7 @@ recorder:
     entity_globs:
       - sensor.wilma_*_briefing
       - sensor.wilma_*_homework
+      - sensor.wilma_*_new_grades
 ```
 
 ## Privacy

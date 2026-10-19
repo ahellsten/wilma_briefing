@@ -73,7 +73,11 @@ describe("buildBriefing", () => {
     expect(en.homework.map((h) => h.homework)).toEqual(["Unit 3 sanat"]);
     // Matched by name (homework had no code).
     expect(bi.homework.map((h) => h.homework)).toEqual(["Lue kappale 4"]);
-    expect(aino.homeworkCount).toBe(3);
+    expect(aino.homework.map((h) => [h.subject, h.due])).toEqual([
+      ["Biologia", "2026-10-15"],
+      ["Englanti", "2026-10-15"],
+      ["Fysiikka", "2026-10-15"],
+    ]);
 
     expect(aino.days[0].firstStart).toBe("08:15");
     expect(aino.days[0].lastEnd).toBe("14:00");
@@ -90,6 +94,11 @@ describe("buildBriefing", () => {
     const english = aino.days[0].lessons.find((l) => l.subject === "Englanti")!;
     // Given on Monday, due today; today's own homework is for the next lesson.
     expect(english.homework.map((h) => h.homework)).toEqual(["Workbook p. 20"]);
+    // Today's own homework is listed too, due at the next lesson.
+    expect(aino.homework.filter((h) => h.subject === "Englanti").map((h) => [h.homework, h.due])).toEqual([
+      ["Workbook p. 20", WED],
+      ["Unit 3 sanat", "2026-10-15"],
+    ]);
   });
 
   it("lets each child have its own next school day", async () => {
@@ -108,6 +117,20 @@ describe("fetchAll", () => {
     expect(aino.lessons.filter((l) => l.date === "2026-10-15")).toHaveLength(4);
     expect(aino.homework).toHaveLength(5);
     expect(aino.lessons.at(-1)?.date).toBe("2026-10-19");
+  });
+
+  it("lists a message in both inbox and appointments once", async () => {
+    const data = await fetchAll(async (args) => {
+      const out = await fixtureRunner(args);
+      if (args[0] !== "summary") return out;
+      const summary = structuredClone(out) as any;
+      const s = summary.students[0].summary;
+      s.messages.push({ ...s.messages[0], folder: "appointments" });
+      s.unreadMessages += 1;
+      return summary;
+    }, { includeNextWeek: false });
+    expect(data.students[0].unreadMessages.map((m) => m.wilmaId)).toEqual([9001]);
+    expect(data.students[0].unreadCount).toBe(1);
   });
 
   it("keeps going when an optional call fails", async () => {

@@ -136,6 +136,7 @@ export class HaMqtt {
     sensor("homework", "Homework", { icon: "mdi:book-open-variant" });
     sensor("unread_messages", "Unread messages", { icon: "mdi:email-alert" });
     sensor("next_exam", "Next exam", { icon: "mdi:file-document-edit", device_class: "date" });
+    sensor("new_grades", "New grades", { icon: "mdi:school-outline" });
   }
 
   private add(entity: Entity) {
@@ -164,7 +165,7 @@ export class HaMqtt {
     this.client.publish(topic, text, { retain: true });
   }
 
-  publishBriefing(b: Briefing, state: string, markdown: string) {
+  publishBriefing(b: Briefing, state: string, markdown: string, html: string) {
     const sn = b.student.studentNumber;
     this.registerStudent(sn, b.student.name);
     const t = (key: string) => `${BASE}/${sn}/${key}`;
@@ -178,13 +179,26 @@ export class HaMqtt {
       last_end: b.days[0]?.lastEnd ?? null,
       days: b.days,
       markdown,
+      html,
     });
 
-    const homework = b.days.flatMap((d) =>
-      d.lessons.flatMap((l) => l.homework.map((h) => ({ due: d.date, subject: l.subject, text: h.homework, given: h.date, teacher: h.teacher })))
-    );
-    this.set(`${t("homework")}/state`, String(b.homeworkCount));
+    const homework = b.homework.map((h) => ({ due: h.due, subject: h.subject, text: h.homework, given: h.date, teacher: h.teacher }));
+    this.set(`${t("homework")}/state`, String(homework.length));
     this.set(`${t("homework")}/attributes`, { items: homework });
+
+    this.set(`${t("new_grades")}/state`, String(b.newGrades.length));
+    this.set(`${t("new_grades")}/attributes`, {
+      items: b.newGrades.map((g) => ({
+        subject: g.subject,
+        name: g.name,
+        grade: g.grade,
+        verbal_grade: g.verbalGrade,
+        info: g.info,
+        exam_date: g.date,
+        first_seen: g.seen ?? null,
+        teacher: g.teacher,
+      })),
+    });
 
     this.set(`${t("unread_messages")}/state`, String(b.unreadCount));
     this.set(`${t("unread_messages")}/attributes`, {

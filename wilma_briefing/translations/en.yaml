@@ -16,6 +16,9 @@ configuration:
   name_display:
     name: Child's name
     description: Show only the first name (default) or the full name as Wilma gives it. Also sets the device and entity names.
+  show_rooms:
+    name: Show classrooms
+    description: Show the classroom after each lesson on the card.
   cutoff_time:
     name: Switch to next day at
     description: After this time (HH:MM) the card shows the next school day and the daily notification is sent.

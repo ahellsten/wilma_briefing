@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- Homework is shown in its own green box above the upcoming exams, instead of under each lesson. Each item shows the subject, its due day and the day it was given, and stays listed until the subject's next lesson has passed.
+- Homework due dates read "huomiselle" / "for tomorrow" or just the date ("23.10. mennessä").
+- New grades: shown on the card for 7 days after they appear in Wilma, announced once in the daily notification, and in a new `sensor.wilma_<name>_new_grades`.
+- The briefing sensor has an `html` attribute: the same card using only `<b>`, `<i>` and `<br>`, for widgets that don't show Markdown.
+- Classrooms are hidden by default. Set `show_rooms: true` to show them after each lesson.
+- Fix an unread message showing twice when Wilma lists it in both the inbox and the appointments folder.
+- `sensor.wilma_<name>_homework` now counts all homework still to do, not only what is due on the days shown.
+
 ## 0.2.1
 
 - Fix every lesson showing twice on the card for today and tomorrow.

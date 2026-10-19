@@ -42,6 +42,21 @@ export interface Exam {
   teacher: string;
 }
 
+export interface Grade {
+  examId: number;
+  date: string; // day of the exam, not when the grade was entered
+  name: string;
+  subject: string;
+  subjectCode: string;
+  grade: string | null;
+  verbalGrade: string | null;
+  info: string | null;
+  teacher: string;
+  /** Set by the add-on: the day it first saw this grade (see grades.ts). */
+  seen?: string;
+  notified?: boolean;
+}
+
 export interface MessageSummary {
   wilmaId: number;
   subject: string;
@@ -71,6 +86,7 @@ interface PerStudent<T> {
 export type SummaryResult = PerStudent<{ summary: Summary }>;
 export type HomeworkResult = PerStudent<{ homework: Homework[] }>;
 export type ScheduleResult = PerStudent<{ lessons: Lesson[] }>;
+export type GradesResult = PerStudent<{ grades: Grade[] }>;
 
 /** Summary parts the briefing doesn't use; Wilma failing to give them is not a problem. */
 const IGNORED_UNAVAILABLE = new Set(["lessonNotes", "news"]);
@@ -142,6 +158,8 @@ export interface StudentData {
   lessons: Lesson[];
   homework: Homework[];
   exams: Exam[];
+  /** Recent exam grades; undefined when `wilma grades` failed. */
+  grades?: Grade[];
   unreadMessages: MessageSummary[];
   unreadCount: number;
   warnings: string[];
@@ -154,8 +172,8 @@ export interface FetchResult {
 }
 
 /**
- * One refresh: `summary` (required), then `homework --limit 30` and the
- * week schedule(s) (best effort). All calls reuse the CLI's cached session.
+ * One refresh: `summary` (required), then `homework --limit 30`, the week
+ * schedule(s) and `grades` (best effort). All calls reuse the CLI's cached session.
  */
 export async function fetchAll(run: Runner, opts: { includeNextWeek: boolean }): Promise<FetchResult> {
   const summary = (await run(["summary"])) as SummaryResult;
@@ -173,6 +191,7 @@ export async function fetchAll(run: Runner, opts: { includeNextWeek: boolean }):
   const homework = await optional<HomeworkResult>(["homework", "--limit", "30"]);
   const week = await optional<ScheduleResult>(["schedule", "week"]);
   const nextWeek = opts.includeNextWeek ? await optional<ScheduleResult>(["schedule", "next-week"]) : undefined;
+  const grades = await optional<GradesResult>(["grades", "--limit", "20"]);
 
   const pick = <T,>(r: PerStudent<T> | undefined, sn: string) =>
     r?.students.find((s) => s.student.studentNumber === sn);
@@ -190,15 +209,20 @@ export async function fetchAll(run: Runner, opts: { includeNextWeek: boolean }):
       [...s.homework, ...(pick(homework, sn)?.homework ?? [])],
       (h) => `${h.date}|${h.subjectCode}|${h.homework}`
     ).sort((a, b) => b.date.localeCompare(a.date));
-    const unread = s.messages.filter((m) => m.unread);
+    // The summary lists the inbox and the appointments folder together, so a
+    // message in both shows up twice (and is counted twice in unreadMessages).
+    const messages = dedupe(s.messages, (m) => String(m.wilmaId));
+    const unread = messages.filter((m) => m.unread);
+    const doubled = s.messages.filter((m) => m.unread).length - unread.length;
     return {
       student,
       today: s.today,
       lessons,
       homework: hw,
       exams: [...s.upcomingExams].sort((a, b) => a.date.localeCompare(b.date)),
+      grades: grades && (pick(grades, sn)?.grades ?? []),
       unreadMessages: unread,
-      unreadCount: Math.max(s.unreadMessages ?? 0, unread.length),
+      unreadCount: Math.max((s.unreadMessages ?? 0) - doubled, unread.length),
       warnings: (s.unavailable ?? []).filter((u) => !IGNORED_UNAVAILABLE.has(u)).map((u) => `unavailable: ${u}`),
     };
   });

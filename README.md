@@ -1,6 +1,6 @@
 # Wilma Briefing
 
-A Home Assistant add-on that shows your children's next school day from Wilma: the lessons, homework highlighted on the lesson it's due, exams and unread messages. It runs as a dashboard card and sends a daily notification the evening before each school day. It uses [WilmAI](https://github.com/aikarjal/wilmai) to read Wilma.
+A Home Assistant add-on that shows your children's next school day from Wilma: the lessons, homework still to do with its due day, exams, new grades and unread messages. It runs as a dashboard card and sends a daily notification the evening before each school day. It uses [WilmAI](https://github.com/aikarjal/wilmai) to read Wilma.
 
 User documentation is in [wilma_briefing/DOCS.md](wilma_briefing/DOCS.md). Home Assistant also shows it on the add-on's Documentation tab.
 
@@ -14,10 +14,10 @@ User documentation is in [wilma_briefing/DOCS.md](wilma_briefing/DOCS.md). Home 
 ## How it works
 
 ```
-wilma CLI (summary, homework, schedule week/next-week)
+wilma CLI (summary, homework, schedule week/next-week, grades)
         │  JSON
         ▼
-  fetchAll ─► buildBriefing (target day + homework matching) ─► render (Markdown / notification)
+  fetchAll ─► buildBriefing (target day + open homework) ─► render (Markdown / HTML / notification)
         │                                                              │
    Scheduler (active hours, cutoff, backoff)                  MQTT discovery ─► HA entities
                                                               Supervisor API ─► notify.*
@@ -26,8 +26,9 @@ wilma CLI (summary, homework, schedule week/next-week)
 | File | Purpose |
 |---|---|
 | `src/wilma.ts` | Runs the `wilma` CLI and merges its JSON per child |
-| `src/briefing.ts` | Picks the days to show and matches homework to lessons |
-| `src/render.ts` | Card Markdown and notification text (fi/en) |
+| `src/briefing.ts` | Picks the days to show and works out which homework is still to do |
+| `src/grades.ts` | Remembers when each grade was first seen, so new ones can be shown |
+| `src/render.ts` | Card Markdown and HTML, and the notification text (fi/en) |
 | `src/scheduler.ts` | Refresh timing, the cutoff switch and the daily notification |
 | `src/mqtt.ts` | MQTT discovery and states |
 | `src/supervisor.ts` | Supervisor API (MQTT credentials, notify) |

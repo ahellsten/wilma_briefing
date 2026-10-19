@@ -48,6 +48,7 @@ const runner: Runner = async (args) => {
   if (cmd.startsWith("homework")) return { students: [{ student, homework }] };
   if (cmd === "schedule week") return { when: "week", students: [{ student, lessons }] };
   if (cmd === "schedule next-week") return { when: "next-week", students: [{ student, lessons: [] }] };
+  if (cmd.startsWith("grades")) return { students: [{ student, grades: [] }] };
   throw new Error(cmd);
 };
 
@@ -80,10 +81,25 @@ describe("realistic Wilma data", () => {
     expect(highlighted("2030-03-13", 17 * 60, data)).toEqual([["Ranska, B2", ["Lue sivu 5"]]]);
   });
 
-  it("renders several rooms and missing rooms", async () => {
+  it("lists homework until the subject's next lesson", async () => {
     const data = await fetchAll(runner, { includeNextWeek: false });
-    const md = renderMarkdown(buildBriefing(data.students[0], "2030-03-10", 17 * 60, cfg), "fi");
+    const ranska = (today: string, minutes: number) =>
+      buildBriefing(data.students[0], today, minutes, cfg).homework.filter((h) => h.subject === "Ranska, B2").map((h) => [h.homework, h.due]);
+    // Given Thu 7 Mar, next French lesson Thu 14 Mar.
+    expect(ranska("2030-03-11", 17 * 60)).toEqual([["Lue sivu 5", "2030-03-14"]]);
+    expect(ranska("2030-03-14", 8 * 60)).toEqual([["Lue sivu 5", "2030-03-14"]]);
+    expect(ranska("2030-03-14", 17 * 60)).toEqual([]);
+    // Kemia's older items were due at its Monday lesson.
+    expect(buildBriefing(data.students[0], "2030-03-12", 8 * 60, cfg).homework.some((h) => h.subject === "Kemia")).toBe(false);
+  });
+
+  it("renders several rooms and missing rooms when rooms are shown", async () => {
+    const data = await fetchAll(runner, { includeNextWeek: false });
+    const briefing = buildBriefing(data.students[0], "2030-03-10", 17 * 60, cfg);
+    const md = renderMarkdown(briefing, "fi", { showRooms: true });
     expect(md).toContain("**12:00–12:45** Kemia · R1, R2");
     expect(md).toMatch(/\*\*13:00–13:45\*\* Draama\s*$/m); // no room
+    // Hidden by default.
+    expect(renderMarkdown(briefing, "fi")).toMatch(/\*\*12:00–12:45\*\* Kemia\s*$/m);
   });
 });
