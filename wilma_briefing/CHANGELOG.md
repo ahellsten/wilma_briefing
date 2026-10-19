@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- The homework due day is bold, like the subject.
+- Homework due next week shows its due day ("ma 26.10. mennessä") instead of "seuraavalle tunnille": next week's timetable is now fetched on every refresh, not only from Thursday on. Due dates also show the weekday.
+- Upcoming exams are shown in a blue box like messages, one per line with the subject, day and topic.
+
 ## 0.3.2
 
 - The heading of the `html` attribute (name and day) is larger (`<big>`), so it stands out in the widget.

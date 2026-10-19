@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { needsNextWeek, Scheduler, type PersistedState, type SchedulerDeps } from "../src/scheduler.js";
+import { Scheduler, type PersistedState, type SchedulerDeps } from "../src/scheduler.js";
 import { WilmaError, type FetchResult } from "../src/wilma.js";
 
 const TZ = "Europe/Helsinki";
@@ -125,14 +125,5 @@ describe("Scheduler", () => {
     s.set(at("2026-10-14", "10:06"));
     s.scheduler.requestRefresh();
     await vi.waitFor(() => expect(s.deps.fetch).toHaveBeenCalledTimes(2));
-  });
-});
-
-describe("needsNextWeek", () => {
-  it("is needed from Thursday on and for several days ahead", () => {
-    expect(needsNextWeek("2026-10-14", 1)).toBe(false); // Wed
-    expect(needsNextWeek("2026-10-15", 1)).toBe(true); // Thu
-    expect(needsNextWeek("2026-10-18", 1)).toBe(true); // Sun
-    expect(needsNextWeek("2026-10-12", 2)).toBe(true);
   });
 });

@@ -6,7 +6,7 @@ import { markNotified, trackGrades, withSeen, type GradesSeen } from "./grades.j
 import { brokerConfig, HaMqtt } from "./mqtt.js";
 import { loadOptions } from "./options.js";
 import { briefingState, renderHtml, renderMarkdown, renderNotification, unnotifiedGrades } from "./render.js";
-import { needsNextWeek, Scheduler, type PersistedState } from "./scheduler.js";
+import { Scheduler, type PersistedState } from "./scheduler.js";
 import { notify } from "./supervisor.js";
 import { applyNameDisplay, cliRunner, fetchAll, wilmaEnv, type FetchResult } from "./wilma.js";
 
@@ -41,7 +41,8 @@ async function main() {
 
   scheduler = new Scheduler(opts, {
     fetch: async (today) => {
-      const data = applyNameDisplay(await fetchAll(run, { includeNextWeek: needsNextWeek(today, opts.daysAhead) }), opts.nameDisplay);
+      // Next week's schedule is always needed: homework given now may be due then.
+      const data = applyNameDisplay(await fetchAll(run, { includeNextWeek: true }), opts.nameDisplay);
       saveGrades(trackGrades(gradesSeen, data.students, today));
       return data;
     },

@@ -1,4 +1,4 @@
-import { clock, weekday } from "./dates.js";
+import { clock } from "./dates.js";
 import { WilmaError, type FetchResult } from "./wilma.js";
 
 export interface SchedulerOptions {
@@ -156,10 +156,4 @@ export class Scheduler {
       this.fetching = false;
     }
   }
-}
-
-/** Fetch the next week's schedule too when the next school days may fall there (Thu–Sun, or several days ahead). */
-export function needsNextWeek(today: string, daysAhead: number): boolean {
-  const wd = weekday(today);
-  return daysAhead > 1 || wd === 0 || wd >= 4;
 }

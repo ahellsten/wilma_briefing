@@ -48,7 +48,7 @@ The add-on device has three more entities:
 
 ## How homework is matched
 
-Wilma records homework on the lesson where it was given and has no due date. The add-on treats homework as due at the **next lesson of the same subject**. The card lists homework in a green box, soonest first, with the due date and the day it was given. Each item stays listed until its due day has passed: homework given on Monday for a Friday lesson is shown from Monday evening until Friday's card moves on to the next school day. Homework older than `homework_lookback_days` is not listed. When the next lesson isn't in the fetched schedule, the item says "for the next lesson" ("seuraavalle tunnille"). Subjects match by name, so `Englanti` matches `Englanti, A1`. The course code is used only when a name is missing.
+Wilma records homework on the lesson where it was given and has no due date. The add-on treats homework as due at the **next lesson of the same subject**. The card lists homework in a green box, soonest first, with the due date and the day it was given. Each item stays listed until its due day has passed: homework given on Monday for a Friday lesson is shown from Monday evening until Friday's card moves on to the next school day. Homework older than `homework_lookback_days` is not listed. The add-on fetches this week's and next week's timetables. When the next lesson is in neither, the item says "for the next lesson" ("seuraavalle tunnille"). Subjects match by name, so `Englanti` matches `Englanti, A1`. The course code is used only when a name is missing.
 
 ## New grades
 

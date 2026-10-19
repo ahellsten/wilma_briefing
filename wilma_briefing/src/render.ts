@@ -102,13 +102,19 @@ export function briefingState(b: Briefing, lang: Language): string {
   return first ? capitalize(dayLabel(first.date, b.today, lang)) : "–";
 }
 
-/** "huomiselle" / "23.10. mennessä": no weekday, the date is enough here. */
+/** "huomiselle" / "pe 23.10. mennessä". */
 function dueLabel(due: string | null, today: string, lang: Language): string {
   const s = STRINGS[lang];
   if (!due) return s.dueNextLesson;
   if (due === today) return s.dueToday;
   if (due === addDays(today, 1)) return s.dueTomorrow;
-  return s.dueOn(shortDate(due, lang));
+  return s.dueOn(formatDate(due, lang));
+}
+
+/** "tänään" / "huomenna" / "21.10.": no weekday. */
+function shortDay(date: string, today: string, lang: Language): string {
+  const s = STRINGS[lang];
+  return date === today ? s.today : date === addDays(today, 1) ? s.tomorrow : shortDate(date, lang);
 }
 
 /** "9 1/2" -> "9½"; a verbal grade when there is no number. */
@@ -169,7 +175,9 @@ function blocks(b: Briefing, lang: Language, opts: RenderOptions): Block[] {
       title: [`📚 ${s.homeworkCount(b.homework.length)}`],
       items: b.homework.map((h) => [
         { b: [w(h.subject)] },
-        ` – ${dueLabel(h.due, b.today, lang)}: `,
+        " – ",
+        { b: [dueLabel(h.due, b.today, lang)] },
+        ": ",
         w(h.homework),
         " ",
         { i: [`(${s.givenOn} ${formatDate(h.date, lang)})`] },
@@ -196,8 +204,17 @@ function blocks(b: Briefing, lang: Language, opts: RenderOptions): Block[] {
   const shown = new Set(b.days.flatMap((d) => d.exams.map((e) => e.examId)));
   const later = b.upcomingExams.filter((e) => !shown.has(e.examId)).slice(0, 3);
   if (later.length) {
-    const list = later.flatMap((e, i): Span[] => [i ? ", " : "", `${formatDate(e.date, lang)} `, w(e.subject || e.name)]);
-    out.push({ kind: "text", spans: [{ b: [`${s.upcoming}:`] }, " ", ...list] });
+    out.push({
+      kind: "box",
+      type: "info",
+      title: [`📝 ${s.upcoming}`],
+      items: later.map((e) => [
+        { b: [w(e.subject || e.name)] },
+        " – ",
+        { b: [shortDay(e.date, b.today, lang) + (e.time ? ` ${t(e.time)}` : "")] },
+        ...(e.topic ? [": ", w(e.topic)] : []),
+      ]),
+    });
   }
 
   if (b.unreadCount > 0) {

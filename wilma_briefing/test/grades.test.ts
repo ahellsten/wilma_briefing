@@ -93,9 +93,9 @@ describe("renderHtml", () => {
     expect(html).toMatch(/<\/div>$/);
     expect(html).toContain("<b>📝 Koe 12:00 – Biologia: Kappaleet 1–4</b>");
     expect(html).toContain("<b>8:15–9:00</b> Fysiikka · A203<br><b>9:00–9:45</b>");
-    expect(html).toContain("<b>📚 3 läksyä</b><br>• <b>Biologia</b> – huomiselle: Lue kappale 4 <i>(annettu ti 13.10.)</i>");
+    expect(html).toContain("<b>📚 3 läksyä</b><br>• <b>Biologia</b> – <b>huomiselle</b>: Lue kappale 4 <i>(annettu ti 13.10.)</i>");
     expect(html).toContain("Tee *kaikki* &lt;b&gt;tehtävät&lt;/b&gt; &amp; muut");
-    expect(html).toContain("<b>Tulevat kokeet:</b> ke 21.10. Fysiikka");
+    expect(html).toContain("<b>📝 Tulevat kokeet</b><br>• <b>Fysiikka</b> – <b>21.10.</b>: Luvut 1–3");
     expect(html).toContain("<b>✉️ 1 lukematon viesti</b><br>• Retkipäivä perjantaina – Virtanen Ville");
     expect(html).not.toMatch(/ha-alert|\*\*|\n/);
     expect(html.replace(/<\/?(big|b|i|br)>|<div style="text-align:start">|<\/div>/g, "")).not.toMatch(/<[a-z]/);
